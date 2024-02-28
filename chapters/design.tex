@@ -1,0 +1,62 @@
+\providecommand{\main}{..}
+\documentclass[\main/tesi.tex]{subfiles}
+\begin{document}
+\chapter{Progettazione}
+\addcontentsline{toc}{chapter}{Progettazione}
+
+\section{Struttura della soluzione}
+Il software è stato progettato con la modularità in mente. \\
+E' infatti stato suddiviso in moduli, rappresentati dalla parola chiave di F\# \cite{fsharp} \textit{module}, che corrisponde ad una classe in un qualsiasi linguaggio orientato ad oggetti.
+I moduli sviluppati sono:
+\begin{itemize}
+    \item \textbf{Utils:} Contiene la definizione di funzioni generiche che possono essere usate da tutti gli altri moduli.
+    \item \textbf{Models:} Contiene la definizione dei modelli utilizzati. In questo caso, i modelli rappresentano delle vere e proprie strutture dati. I modelli sono:
+          \begin{itemize}
+              \item \textbf{Tree:} Contiene la definizione delle funzioni per attraversare un albero binario di ricerca.
+              \item \textbf{Expression:} Contiene la definizione delle funzioni per leggere o valutare una formula. E' il modulo centrale del progetto in quanto è quello che manipola le interpretazioni interne delle formule logiche.
+          \end{itemize}
+    \item \textbf{Interpreter:} Contiene la definizione dei moduli rappresentanti il Lexer ed il Parser necessari per l'interpretazione delle formule sotto forma di stringhe:
+          \begin{itemize}
+              \item \textbf{Lexer:} Contiene la definizione delle funzioni per spezzare una stringa in caratteri, riconoscere a che categoria appartiene ogni carattere analizzato, trasformare ogni carattere in \textit{Token}.
+              \item \textbf{Parser:} Contiene la definizione delle funzioni per analizzare la lista di token e ricostruire ricorsivamente la formula sotto forma di rappresentazione interna.
+          \end{itemize}
+    \item \textbf{Algorithm:} Contiene la definizione delle funzioni che costituiscono il calcolo di refutazione.
+\end{itemize}
+
+L'obiettivo di questa suddivisione è quello di garantire che ciascun modulo possa essere utilizzato indipendentemente dagli altri moduli.
+Ogni modulo ha il suo file di interfaccia dove vengono definite le firme dei metodi.
+
+\section{Strutture di supporto}
+Come descritto nella sezione precedente, sono state utilizzate delle strutture dati per rappresentare le formule:
+\begin{itemize}
+    \item \textbf{Tree:} Alberi binari di ricerca
+    \item \textbf{Formula:} Tipo ricorsivo che definisce le varie rappresentazioni di una formula
+\end{itemize}
+L'utilizzo dell'albero binario è giustificato dal fatto che la rappresentazione di una formula tramite struttura gerarchica è utile nel caso di necessità di ricercare una sotto-formula o capire l'ordine in cui le sotto-formule compaiono nella formula totale. \\
+Il tipo ricorsivo \textit{Formula} invece, rappresenta la formula vera e propria. E' il tipo largamente utilizzato all'interno del modulo \textit{Expression} per implementare tutte le funzioni ed operazioni utili da eseguire sulla formula richieste dall'algoritmo. \\
+Altri tipi di strutture utilizzate sono quelle standard del linguaggio F\# \cite{fsharp}:
+\begin{itemize}
+    \item \textbf{List}
+    \item \textbf{Set}
+    \item \textbf{Seq}
+\end{itemize}
+
+\section{Configurazione}
+La configurazione del progetto è gestita tramite file \textit{.fsproj} che contiene le opzioni di compilazione e l'ordine di compilazione dei file. E' necessario, per evitare errori, che file che dipendono da altri file vengano messi come successivi al file da cui dipendono.
+Non sono presenti ulteriori configurazioni del progetto.
+
+\section{Il flusso di esecuzione}
+Per assicurarsi che la soluzione sia flessibile e in grado di gestire gli errori, il flusso di esecuzione è stato diviso in diverse fasi:
+\begin{itemize}
+    \item \textbf{Lettura:} In questa fase viene letta la formula rappresentante l'obiettivo dal file di testo \textit{Goal.txt} dentro la cartella \textit{Input}. La formula verrà letta sotto forma di stringa e sarà sempre e solo una.
+    \item \textbf{Lexing:} In questa fase, viene definita una grammatica, ossia un insieme di pattern rappresentati da \textit{Regex} che hanno il compito di riconoscere un determinato tipo di carattere e associarlo ad una categoria. Le categorie sono: Aperta/chiusa parentesi, identificatore, operatore, spazio. Una volta definita la grammatica, la stringa viene spezzata in singoli caratteri ed ogni carattere viene confrontato con le Regex della grammatica. Ad ogni riconoscimento viene creato un \textit{Token}, che è una semplice associazione tra il carattere e la tipologia con il quale è stato riconosciuto.
+    \item \textbf{Parser:} In questa fase, viene presa la lista di token generata dal \textit{Lexer} e viene utilizzata per ricostruire in modo ricorsivo la formula utilizzando la rappresentazione interna (tipo ricorsivo \textit{Formula})
+    \item \textbf{Calcolo:} In questa fase, una volta ottenuta la rappresentazione interna dell'obiettivo, si può procedere con l'algoritmo.
+\end{itemize}
+Per le fasi di Lexing, Parsing e Calcolo, è stato definito un tipo apposta per il debugging. In caso di errore viene riportato sia il tipo di errore, sia dove si è verificato.
+
+\subsection{Pacchetti Nuget}
+\label{nuget}
+Non sono stati definiti dei pacchetti nuget \cite{nuget} personalizzati, ma è stato comunque necessario installare i pacchetti standard .NET \cite{dotnet} per l'utilizzo delle strutture dati standard.
+
+\end{document}

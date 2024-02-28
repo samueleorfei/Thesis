@@ -1,3 +1,8 @@
+
+# Created by https://www.toptal.com/developers/gitignore/api/latex
+# Edit at https://www.toptal.com/developers/gitignore?templates=latex
+
+### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
@@ -111,16 +116,9 @@ acs-*.bib
 *.glsdefs
 *.lzo
 *.lzs
-*.slg
-*.slo
-*.sls
 
 # uncomment this for glossaries-extra (will ignore makeindex's style files!)
 # *.ist
-
-# gnuplot
-*.gnuplot
-*.table
 
 # gnuplottex
 *-gnuplottex-*
@@ -196,9 +194,6 @@ _minted*
 # scrwfile
 *.wrt
 
-# svg
-svg-inkscape/
-
 # sympy
 *.sout
 *.sympy
@@ -222,9 +217,6 @@ pythontex-files-*/
 *.dpth
 *.md5
 *.auxlock
-
-# titletoc
-*.ptc
 
 # todonotes
 *.tdo
@@ -299,3 +291,16 @@ TSWLatexianTemp*
 # option is specified. Footnotes are the stored in a file with suffix Notes.bib.
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
+
+### LaTeX Patch ###
+# LIPIcs / OASIcs
+*.vtc
+
+# glossaries
+*.glstex
+
+*_temp.tex
+
+*.pdf
+
+# End of https://www.toptal.com/developers/gitignore/api/latex

@@ -1,0 +1,216 @@
+\providecommand{\main}{..}
+\documentclass[\main/tesi.tex]{subfiles}
+\begin{document}
+\chapter{Pseudocodice}
+\addcontentsline{toc}{chapter}{Pseudocodice}
+
+In questa sezione verranno mostrate le funzioni principali per il funzionamento dell'algoritmo sotto forma di pseudocodice.
+
+\section{Utilità}
+
+Le funzioni di utilità utilizzate sono:
+\begin{itemize}
+    \item \textbf{atoms}
+    \item \textbf{imps}
+    \item \textbf{combinations}
+\end{itemize}
+
+\subsection{atoms}
+Qui verrà presentato lo pseudocodice per la funzione \textit{atoms}, incaricata di estrapolare ricorsivamente tutte le possibili variabili proposizionali da una lista di formule. \\
+
+\begin{algorithm}
+    \caption{Pseudocodice per la funzione \textbf{atoms}}\label{alg:atoms}
+    \begin{algorithmic}
+        \Function{atoms}{set}
+        \Function{single}{acc, f}
+        \If{$f = Atom$}
+        \State \textbf{return} concat(acc, [f])
+        \ElsIf{$f = \bot$}
+        \State \textbf{return} acc
+        \Else
+        \State \textbf{single}(acc, sottoFormule di f)
+        \EndIf
+        \State \textbf{return} acc
+        \EndFunction
+        \ForAll{$f \in set$}
+        \State $f \gets \textbf{single}([], f)$
+        \EndFor
+        \State \textbf{return} set
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{imps}
+Qui verrà presentato lo pseudocodice per la funzione \textit{imps}, incaricata di estrapolare ricorsivamente tutte le possibili formula dalla forma $A \Rightarrow B$ da una lista di formule. \\
+
+\begin{algorithm}
+    \caption{Pseudocodice per la funzione \textbf{imps}}\label{alg:imps}
+    \begin{algorithmic}
+        \Require $set \neq \emptyset$
+        \Ensure res senza duplicati
+        \State $res = \emptyset$
+        \State $i = 0$
+        \While{$set \neq \emptyset$}
+        \State $x = set[i]$
+        \If{$x$ is $\neg$ or $\Rightarrow$}
+        aggiungi x a res
+        \State $i = i + 1$
+        \EndIf
+        \EndWhile
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{combinations}
+Qui verrà presentato lo pseudocodice per la funzione \textit{combinations}, incaricata di creare tutte le combinazioni possibili degli elementi di una lista di formule e di restituirle sotto forma di lista di liste di formule. \\
+
+\begin{algorithm}
+    \caption{Pseudocodice per la funzione \textbf{combinations}}\label{alg:combinations}
+    \begin{algorithmic}
+        \Function{combinations}{lst}
+        \Function{comb}{accLst, elemLst}
+        \Repeat
+        \State $top \gets \textbf{pop}(elemLst)$
+        \State $res \gets $ concatenazione di $top$ davanti ad ogni elemento di $concat(accList, accList)$
+        \State $next \gets \textbf{concat}(top, res)$
+        \State comb(next, elemLst)
+        \Until{$elemLst$ is empty}
+        \State \textbf{return} accList
+        \EndFunction
+        \State \textbf{return} comb([], lst)
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+\section{Calculus}
+Il calcolo di refutazione è composto da 3 funzioni principali:
+\begin{itemize}
+    \item \textbf{generateAxioms}
+    \item \textbf{execute}
+    \item \textbf{printResult}
+\end{itemize}
+
+\subsection{generateAxioms}
+Qui verrà presentato lo pseudocodice per la funzione \textit{generateAxioms}, incaricata di creare tutti gli assiomi possibili che avranno la forma di sequenti. \\
+
+\begin{algorithm}
+    \caption{Pseudocodice per la funzione \textbf{generateAxioms}}\label{alg:generateAxioms}
+    \begin{algorithmic}
+        \Function{generateAxioms}{subFormulas}
+        \State $atomSF \gets \textbf{atoms}(subFormulas)$
+        \State $combs \gets \textbf{combinations}(atomSF)$
+        \ForAll{$x \in combs$}
+        \State $x \gets (\{x\}, \emptyset, \{\bot, \{atomSF\} - \{x\}\})$
+        \EndFor
+        \State \textbf{return} \textbf{concat}(combs, [($\emptyset, \emptyset, \{atomSF, \bot\}$)])
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{execute}
+Qui verrà presentato lo pseudocodice per la funzione \textit{execute}, che rappresenta il vero e proprio calcolo di refutazione. Una volta creati gli assiomi iniziali, applica tutte le regole a tutti i sequenti generati negli step successivi fino ad ottenere un sequente che rispetta le condizioni di interruzione. \\
+
+\begin{comment}
+\begin{algorithm}
+    \caption{Pseudocodice per la funzione \textbf{proof}}\label{alg:proof}
+    \begin{algorithmic}
+        \Function{proof}{$G, \Gamma, \Lambda, \Delta, sl, sf, k, history$}
+        \While{($G \notin Cl^{-}(\Delta \cup \Lambda)) \lor (sl \land sr \neq \emptyset)$}
+        \State $leftItems \gets $ elementi in sl che rispettano $L\Rightarrow$
+        \State $rightItems \gets $ elementi in sr che rispettano $R\Rightarrow$
+        \If{$leftItems \land rightItems = \emptyset$}
+        \State $\Lambda^{'} = \Gamma^{at} \cap \Delta^{at}$
+        \If{$\Lambda^{'} = \Lambda$}
+        \State \textbf{return} null
+        \Else
+        \State $result \gets null$
+        \ForAll{$comb \in \textbf{combinations(\Lambda^{'})}$}
+        \State $nG \gets \Gamma - comb$
+        \State $nD \gets \Delta \cup \Lambda$
+        \State $nK \gets k + 1$
+        \State $nH \gets \textbf{concat}(history, [(Succ, bG, comb, nD, nK)])$
+        \State $result \gets \textbf{proof}(G, nG, nD, comb, sl, sr, nK, nH)$
+
+        \If{$result \neq null$}
+        \State \textbf{return} result
+        \Else
+        \State \textbf{continue}
+        \EndIf
+        \EndFor
+        \EndIf
+        \Else
+        \State $lF \gets \textbf{pop}(leftItems)$
+        \State $rF \gets \textbf{pop}(rightItems)$
+        \State $nD \gets \Delta, rF$
+        \State $nG \gets \Gamma, lF$
+        \State $lH \gets \textbf{concat}(history, [(Left, nG, \Lambda, \Delta, k)])$
+        \State $rH \gets \textbf{concat}(history, [(Right, \Gamma, \Lambda, nD, k)])$
+
+        \State{$lR \gets \textbf{proof}(G, nG, \Lambda, \Delta, \{sl - lF\}, sr, k, lH)$}
+        \State{$rR \gets \textbf{proof}(G, \Gamma, \Lambda, nD, sl, \{sr - rF\}, k, rH)$}
+
+        \If{$lR \neq null \land rR \neq null$}
+        \State \textbf{return} lR
+        \ElsIf{$lR = null \land rR \neq null$}
+        \State \textbf{return} rR
+        \ElsIf{$lR \neq null \land rR = null$}
+        \State \textbf{return} lR
+        \Else
+        \State \textbf{return} null
+        \EndIf
+        \EndIf
+        \EndWhile
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+\end{comment}
+
+\begin{algorithm}
+    \caption{Pseudocodice per la funzione \textbf{execute}}\label{alg:execute}
+    \begin{algorithmic}
+        \Function{execute}{goal}
+        \State $(sl, sr) \gets \textbf{subFormulas}(goal)$
+        \State $sf \gets \textbf{concat}(sl, sr)$
+        \State $impSL \gets \textbf{imps}(sl)$
+        \State $impSR \gets \textbf{imps}(sr)$
+        \State $axioms \gets \textbf{generateAxioms}(sf)$
+        \State $result = null$
+        \ForAll{$(Rule, \Gamma, \Lambda, \Delta, k) \in axioms$}
+        \If{($\Gamma^{at} \cup \Delta^{at} = Sf^{at}(G)) \land (\Gamma^{at} \cap \Delta^{at} = \emptyset)$}
+        \State $result = \textbf{proof}(goal, \Gamma, \Delta, \Lambda, sl, sr, 0, [(Ax, \Gamma, \Lambda, \Delta, 0)])$
+        \Else
+        \State \textbf{continue}
+        \EndIf
+
+        \If{$result \neq null$}
+        \State \textbf{break}
+        \EndIf
+        \EndFor
+        \State \textbf{return} result
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{printResult}
+Qui verrà presentato lo pseudocodice per la funzione \textit{printResult}, che prende in input il risultato della funzione \textit{execute} e stampa sul terminale gli step che hanno portato alla costruzione del contro-modello indentati in maniera comprensibile. \\
+
+\begin{algorithm}
+    \caption{Pseudocodice per la funzione \textbf{printResult}}\label{alg:printResult}
+    \begin{algorithmic}
+        \Procedure{printResult}{results}
+        \ForAll{$(Rule, \Gamma, \Lambda, \Delta, k) \in results$}
+        \If{$Rule = Ax$}
+        \State printf "$K = k, Ax$"
+        \ElsIf{$Rule = Left$}
+        \State printf "$K = k, L\Rightarrow$"
+        \ElsIf{$Rule = Right$}
+        \State printf "$K = k, R\Rightarrow$"
+        \ElsIf{$Rule = Succ$}
+        \State printf "$K = k, Succ$"
+        \EndIf
+        \State printf "$\Gamma \not\Rightarrow \Lambda$; $\Delta$"
+        \EndFor
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+\end{document}

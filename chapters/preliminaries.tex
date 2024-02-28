@@ -1,0 +1,59 @@
+\providecommand{\main}{..}
+\documentclass[\main/tesi.tex]{subfiles}
+\begin{document}
+\chapter{Preliminari}
+\addcontentsline{toc}{chapter}{Preliminari}
+
+Le formule, denotate da lettere latine maiuscole, sono costruite da un insieme infinito di variabili proposizionali \(V = \{p,q,p1,p2,...\}\), dalla costante \(\bot\) e dai connettivi \(\land, \lor, \Rightarrow\). \\
+E' importante sottolineare il fatto che nella logica di G\"odel-Dummett, l'espressione \(\neg A\) rappresenta la forma abbreviata per \(A \Rightarrow \bot\). \\
+
+L'implementazione dell'algoritmo fa uso di alcune nozioni matematiche per la manipolazione e l'estrapolazione di informazioni da una \textit{formula}, quali: \\
+\begin{itemize}
+    \item Sotto-formula
+    \item Sotto-formula sinistra
+    \item Sotto-formula destra
+    \item Chiusura positiva
+    \item Chiusura negativa
+\end{itemize}
+
+\section{Sottoformule}
+
+Sia G una formula; Sf(G) è l'insieme di tutte le sottoformule di G, inclusa G stessa.
+
+Una sottoformula è una formula contenuta in G (Es. Se \(G = A \land B\), le sotto-formule sono: A, B e G stessa). \\
+Le sotto-formule possono dividersi in altre 2 categorie di formule:
+\begin{itemize}
+    \item Negative (o sinistre)
+    \item Positive (o destre)
+\end{itemize}
+
+Con il termine SL(G) denotiamo il sotto-insieme di formule negative estratto da Sf(G), mentre con SR(G) denotiamo il sotto-insieme di formule positive. \\
+Formalmente, SL(G) ed SR(G) sono i più piccoli sotto-insiemi di Sf(G) tali che:
+\begin{itemize}
+    \item \(G \in SR(G)\)
+    \item \(A \odot B \in SX(G) \Rightarrow \{A, B\} \subseteq SX(G)\), dove \(\odot \in \{\land, \lor\}\), e \(SX \in \{SL, SR\}\)
+    \item \(A \Rightarrow B \in SL(G) \Rightarrow B \in SL(G) \land A \in SR(G)\)
+    \item \(A \Rightarrow B \in SR(G) \Rightarrow B \in SR(G) \land A \in SL(G)\)
+\end{itemize}
+
+Per \(SX \in \{SL, SR\}\) abbiamo:
+\begin{itemize}
+    \item $SX^{at}(G) = SX(G) \cap V$
+    \item $SX^{at, \Rightarrow}(G) = SX^{at}(G) \cup SX^{\Rightarrow}(G)$
+    \item $SX^{\Rightarrow}(G) = SX(G) \cap L^{\Rightarrow}$
+    \item $Sf^{at}(G) = SL^{at}(G) \cup SR^{at}(G)$
+\end{itemize}
+
+\section{Chiusure}
+
+Sia S un insieme di formule; Consideriamo le formule P ed N definite dalla seguente grammatica, dove \(A \in S\) ed F è una formula qualsiasi:
+\begin{itemize}
+    \item \(P ::= A|P \land P|F \lor P|P \lor F|F \Rightarrow P\)
+    \item \(N ::= A|N \lor N|F \land P|P \land F\)
+\end{itemize}
+La \textit{chiusura positive} di S, denotata da $Cl^+$(S), è il più piccolo insieme contenente le formule descritte dalla grammatica P;
+La \textit{chiusura negativa} di S, denotata da $Cl^-$(S), è il più piccolo insieme contenente le formule descritte dalla grammatica N. \\
+
+Nel caso una formula sia composta da più sotto-formule, va eseguita una ricerca ricorsiva per capire se è contenuta nella chiusura positiva o negativa. \\
+
+\end{document}

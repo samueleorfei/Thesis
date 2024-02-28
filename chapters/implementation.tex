@@ -1,0 +1,233 @@
+\providecommand{\main}{..}
+\documentclass[\main/tesi.tex]{subfiles}
+\begin{document}
+\chapter{Implementazione}
+\addcontentsline{toc}{chapter}{Implementazione}
+
+\section{Regole generali codice}
+L'utilizzo del linguaggio \textit{F\#} \cite{fsharp} per lo sviluppo del progetto ha portato con sè potenti strumenti per lo sviluppo derivati dal fatto che F\# \cite{fsharp} è un linguaggio funzionale. \\
+E' stato fatto largo uso del \textit{Pattern matching}, uno strumento di riconoscimento di pattern all'interno di strutture dati astratte utilizzato per condizionare le funzioni ricorsive. \\
+
+\subsection{Strutture dati}
+Come descritto nelle sezioni precedenti, sono state utilizzate alcune strutture di supporto per facilitare alcune operazioni sulle formule. \\
+Tali strutture sono:
+\begin{itemize}
+    \item \textbf{Tree}
+    \item \textbf{Formula}
+    \item \textbf{Token}
+    \item \textbf{TokenType}
+\end{itemize}
+Ognuna di queste strutture è stata utilizzata dal rispettivo modulo per l'implementazione delle relative funzioni.
+
+\subsection{Tree}
+Questa struttura rappresenta un albero binario di ricerca utilizzato come metodo alternativo di rappresentazione di una formula. Il motivo del suo utilizzo è la sua facilità di ricerca di una sotto-formula e la sua facilità nell'utilizzare gli algoritmi di ricerca per ottenere le sottoformule nell'ordine corretto. \\
+La struttura è definita come tipo ricorsivo generico che può assumere 2 valori:
+\begin{itemize}
+    \item \textbf{Null:} Valore assunto nel caso in cui l'albero (o un sotto-albero) è vuoto.
+    \item \textbf{Node:} Valore assunto nel caso in cui l'albero o il sotto-albero è popolato. \textit{Node} ha come primo valore, il valore del nodo che sarà di tipo \textit{'T}, ossia generico, come secondo valore il suo sotto-albero sinistro e come terzo valore il suo sotto-albero destro.
+\end{itemize}
+Il modulo che va ad utilizzare la struttura \textit{Tree} è il modulo omonimo, ossia \textit{Tree}.
+
+\subsection{Formula}
+Questa struttura è la struttura standard per la rappresentazone interna delle formule. \\
+La struttura è definita come tipo ricorsivo che può assumere i seguenti valori:
+\begin{itemize}
+    \item \textbf{True:} Indica una formula che assume solo il valore di verità Vero.
+    \item \textbf{False:} Indica una formula che assume solo il valore di verità Falso.
+    \item \textbf{Atom:} Indica una proposizione atomica. L'atomo può essere identificato da una qualsiasi stringa (Atom(x)).
+    \item \textbf{Not:} Indica una formula di negazione. Il suo valore è una sotto-formula a cui viene applicata una negazione (Not(sub-formula)).
+    \item \textbf{And:} Indica una formula di congiunzione. I suoi valori sono 2 sotto-formule a cui viene applicata una congiunzione (And(x, y)).
+    \item \textbf{Or:} Indica una formula di disgiunzione. I suoi valori sono 2 sotto-formule a cui viene applicata una disgiunzione (Or(x, y)).
+    \item \textbf{Iff:} Indica una formula di co-implicazione. I suoi valori sono 2 sotto-formule a cui viene applicata una co-implicazione (Iff(x, y)).
+    \item \textbf{Imp:} Indica una formula di implicazione. I suoi valori sono 2 sotto-formule a cui viene applicata una implicazione (Imp(x, y)).
+\end{itemize}
+Il modulo che va ad utilizzare la struttura \textit{Formula} è \textit{Expression}. Il modulo espone tutte le funzioni necessarie per leggere una formula da file di testo, per trasformare una formula in albero binario, per trovare le sue sotto-formule e per trasformare una formula in stringa.
+
+\subsection{Token}
+Questa struttura è utilizzata per rappresentare un carattere identificato con il \textit{Lexer} ed a cui è stata assegnata una categoria, chiamata \textit{TokenType}, di appartenenza. Il \textit{Token} può assumere i seguenti valori:
+\begin{itemize}
+    \item \textbf{Identifier:} Identifica il riconoscimento di un carattere che rappresenta una proposizione atomica in una formula. Il suo valore è la stringa che identifica l'atomo.
+    \item \textbf{Whitespace:} Identifica il riconoscimento di uno spazio nella formula.
+    \item \textbf{OpenParanthesis:} Identifica il riconoscimento di una parentesi aperta nella formula.
+    \item \textbf{ClosedParenthesis:} Identifica il riconoscimento di una parentesi chiusa nella formula.
+    \item \textbf{Not:} Identifica il riconoscimento di un operatore di negazione nella formula.
+    \item \textbf{And:} Identifica il riconoscimento di un operatore di congiunzione nella formula.
+    \item \textbf{Or:} Identifica il riconoscimento di un operatore di disgiunzione nella formula.
+    \item \textbf{Imp:} Identifica il riconoscimento di un operatore di implicazione nella formula.
+    \item \textbf{Iff:} Identifica il riconoscimento di un operatore di co-implicazione nella formula.
+\end{itemize}
+Il tipo \textit{Token} è utilizzato nel modulo \textit{Lexer e Parser e Token}.
+
+\subsection{TokenType}
+Questa struttura identifica la categoria a cui i vari \textit{Token} possono appartenere. Le categorie sono:
+\begin{itemize}
+    \item \textbf{Identifier:} Categoria che rappresenta tutte le proposizioni atomiche.
+    \item \textbf{Whitespace:} Categoria che rappresenta gli spazi (Space).
+    \item \textbf{OpenParanthesis:} Categoria che rappresenta le parentesi aperte.
+    \item \textbf{ClosedParenthesis:} Categoria che rappresenta le parentesi chiuse.
+    \item \textbf{Operator:} Categoria che rappresenta tutti gli operatori logici.
+\end{itemize}
+Il tipo \textit{TokenType} è utilizzato dal modulo \textit{Token, Lexer e Parser}.
+
+\section{Moduli}
+
+\subsection{Expression}
+Il modulo Expression contiene la definizione delle funzioni per l'interpretazione o la trasformazione di un albero di sintassi per espressioni logiche. Le funzioni implmentate sono:
+\begin{itemize}
+    \item \textbf{toString:} Funzione ricorsiva che data la rappresentazione interna di una formula, la trasforma in stringa.
+    \item \textbf{toBinaryTree:} Funzione ricorsiva che data la rappresentazione interna di una formula, la restituisce sotto forma di albero binario di ricerca. Fa uso della struttura \textit{Tree}.
+    \item \textbf{parse:} Funzione che data una stringa che rappresenta una formula, restituisce la sua rappresentazione interna. Per farlo, utilizza i moduli \textit{Lexer e Parser}.
+    \item \textbf{fromFile:} Funzione che data una stringa che rappresenta la path di un file restituisce una lista di Formule, una per riga letta. Per leggere le righe viene utilizzata la funzione ReadLines del tipo File di .NET \cite{dotnet}.
+    \item \textbf{subFormulas:} Funzione ricorsiva che data la rappresentazione interna di una Formula, restituisce una tupla <Lista di formule, Lista di formule> che rappresentano rispettivamente le sotto-formule sinistre e destre della formula data in input. Le regole per decidere se una sotto-formula è sinistra o destra sono le seguenti:
+          \begin{itemize}
+              \item La formula di partenza è sempre sotto-formula destra di sè stessa
+              \item Le formule di congiunzione e disgiunzione mantengono lo stesso tipo della loro formula padre
+              \item Le formule di implicazione dipendono dal loro tipo: Se sono destre, allora la sotto-formula a sinistra dell'operatore è sinistra e quella a destra è destra; altrimenti la sotto-formula a sinistra dell'operatore è destra e l'altra è sinistra.
+          \end{itemize}
+          Gli insiemi di sotto-formule sinistre e destre sono privi di duplicati ma non sono mutualmente esclusivi
+    \item \textbf{isPositiveClosure:} Funzione ricorsiva che data la rappresentazione interna di una formula ed una lista di Formule, restituisce un boolean che dice se la formula appartiene alla chiusura positiva della lista oppure no. La regola per decidere la sua appartenenza o meno è la seguente:
+          \begin{itemize}
+              \item Se la formula è direttamente dentro la lista allora appartiene.
+              \item Altrimenti bisogna ricorsivamente controllare le sottoformule che compongono la formula. Nel caso la formula sia una congiunzione, bisogna controllare che entrambe le sotto-formule siano positive. Se è una disgiunzione basta che solo una delle due sia positiva. Se è una implicazione basta che la formula a destra dell'operatore sia positiva
+          \end{itemize}
+    \item \textbf{isNegativeClosure:} Funzione ricorsiva che data la rappresentazione interna di una formula ed una lista di Formule, restituisce un boolean che dice se la formula appartiene alla chiusura negativa della lista oppure no. La regola per decidere la sua appartenenza o meno è la seguente:
+          \begin{itemize}
+              \item Se la formula è direttamente dentro la lista allora appartiene.
+              \item Altrimenti bisogna ricorsivamente controllare le sottoformule che compongono la formula. Nel caso la formula sia una congiunzione, basta che solo una delle due sotto-formule sia negativa. Nel caso la formula sia una disgiunzione, entrambe le sotto-formule devono essere negative.
+          \end{itemize}
+\end{itemize}
+
+\subsection{Tree}
+Il modulo Tree contiene la definizione delle funzioni per l'attraversamento di un albero binario. Le funzioni sono:
+\begin{itemize}
+    \item \textbf{Inorder:} Funzione ricorsiva che prende in input un albero binario e restituisce la lista dei valori dei suoi nodi in ordine simmetrico.
+    \item \textbf{Preorder:} Funzione ricorsiva che prende in input un albero binario e restituisce la lista dei valori dei suoi nodi in ordine anticipato.
+    \item \textbf{Postorder:} Funzione ricorsiva che prende in input un albero binario e restituisce la lista dei valori dei suoi nodi in ordine posticipato.
+\end{itemize}
+
+\subsection{Token}
+Nel modulo Token sono esposte alcune funzioni per il parsing e la grammatica per i tipi \textit{Token} omonimi:
+\begin{itemize}
+    \item \textbf{types:} Funzione che restituisce una lista contenente tutti i possibili \textit{TokenType} con cui carattere può essere riconosciuto.
+    \item \textbf{rule:} Funzione che dato un TokenType restituisce una stringa rappresentante una regex utilizzata per riconoscere i caratteri. La regex rappresenta la grammatica associata al TokenType.
+    \item \textbf{grammar:} Funzione che restituisce una Mappa che mette in relazione TokenType con la sua grammatica. Funzione utilizzata per scopi pratici, in quanto la struttura Map rende più semplice l'ottenimento di una grammatica.
+    \item \textbf{parse:} Funzione che data una stringa rappresentante un Token, restituisce il Token corrispondente al carattere.
+    \item \textbf{toString:} Funzione che dato un Token lo trasforma in stringa, restituendo il carattere che lo rappresenta.
+\end{itemize}
+
+\subsection{Lexer}
+Il modulo \textit{Lexer} contiene la definizione delle funzioni per eseguire la scansione di una stringa e la sua suddivisione in Token gestibili dal \textit{Parser}. Rappresenta la prima parte di un interprete. \\
+Contiene le seguenti funzioni:
+\begin{itemize}
+    \item \textbf{scanner:} Funzione implicita che data una stringa in input, restituisce una lista di stringhe. La lista di stringhe viene generata applicando ricorsivamente le regole della grammatica (Regex) alla stringa ed alle sotto-stringhe generate in seguito dalla funzione implicita \textit(split). Ogni applicazione della grammatica, crea una piccola lista di stringhe contenente le parti di stringa che rispettano quella grammatica.
+    \item \textbf{evaluator:} Funzione implicita che data una lista di stringhe ed una lista di \textit{TokenType}, restituisce una lista di \textit{Token}. Ogni singola stringa viene confrontata con ogni regex all'interno della grammatica. Se non esiste nessuna grammatica in grado di riconoscerla, viene sollevata una eccezione. Altrimenti, viene controllato a quale \textit{TokenType} corrisponde e viene di conseguenza creato il \textit{Token} corrispondente.
+    \item \textbf{tokenize:} Funzione esplicita che data una stringa in input, restituisce una lista di \textit{Token}, ossia i caratteri con la loro categoria di appartenenza. Il risultato è ottenuto dalla concatenazione dei risultati di scanner ed evaluate.
+\end{itemize}
+
+\subsection{Parser}
+Il modulo \textit{Parser} contiene la definizione delle funzioni che servono a costruire un albero di sintassi (Formula) partendo da una lista di \textit{Token} generata dal \textit{Lexer}. La costruzione della Formula avviene in maniera ricorsiva sfruttando un concetto chiamato \textit{mutua ricorsione}. \\
+Contiene le seguenti funzioni:
+\begin{itemize}
+    \item \textbf{parse:} Funzione esplicita che data una lista di \textit{Token}, restituisce un risultato di tipo \textit{Result} con 2 valori: il primo è una tupla composta dalla rappresentazione interna della formula interpretata sottoforma di \textit{Formula} e dalla lista di token utilizzata per generarla, l'altro è una stringa che identifica un errore nel caso in cui la procedura si sia interrotta per via di una eccezione.
+    \item \textbf{constParser:} Funzione implicita che data una \textit{Formula} ed una lista di \textit{Token}, restituisce un \textit{Result} positivo (privo di errori).
+    \item \textbf{parseIdentifier:} Funzione implicita che data una lista di \textit{Token}, controlla che il primo elemento della lista sia un \textit{Token} di tipo \textit{Identifier}, ossia una proposizione atomica. Se non lo è, ritorna un risultato di tipo Error.
+    \item \textbf{parseToken:} Funzione implicita che dato uno specifico \textit{Token} ed una lista di \textit{Token}, controlla che il primo elemento della lista sia esattamente uguale al token passato in input. In caso contrario, restituisce un risultato di tipo Error.
+    \item \textbf{parseOperator:} Funzione implicita che data una lista di \textit{Token}, controlla la presenza di un operatore. Il primo passaggio è controllare che il primo elemento sia un Termine (Proposizione atomica o parentesi). Se non lo è, controlla se è invece un Operatore (In questo caso si tratterebbe di un operatore unario come il Not). Se non lo è, restituisce un errore, altrimenti controlla che l'ultimo termine sia una espressione e la applica come input all'operatore unario, restituendo la formula finale. Se invece il primo è un Termine, allora si controlla che il secondo elemento sia un Operatore (binario questa volta). Se lo è, si procede a controllare se il terzo termine è una espressione ed in caso, si restituisce la formula. Altrimenti si restituisce un errore.
+    \item \textbf{parseParenthesis:} Funzione implicita che data una lista di \textit{Token}, controlla la presenza di una espressione racchiusa tra parentesi. Controlla che il primo elemento della lista sia di tipo "parentesi aperta". Se non lo è, restituisce un errore, altrimenti continua controllando che l'elemento successivo sia una espressione. Se non lo è, restituisce errore, altrimenti procede a controllare che il terzo elemento sia di tipo "parentesi chiusa". Se non lo è restituisce errore, altrimenti restituisce la formula finale.
+    \item \textbf{parseTerm:} Funzione implicita che data una lista di \textit{Token}, controlla che la lista rappresenti una espressione racchiusa tra parentesi, oppure un identificatore composto da costanti atomiche.
+    \item \textbf{parseExpression:} Funzione implicita che data una lista di \textit{Token} controlla che la lista rappresenti una espressione, si che essa parta con un Termine (parentesi o identificatore), oppure che essa parta direttamente con un operatore (come nel caso di una Formula NOT).
+\end{itemize}
+Le funzioni \textit{parseOperator, parseParenthesis, parseTerm, parseExpression} sono funzioni definite \textbf{mutualmente ricorsive}. Questo significa che sono funzioni ricorsive ma si richiamano l'una con l'altra durante la loro esecuzione creando, appunto, una mutua ricorsione.
+
+\subsection{Calculus}
+
+\subsubsection{Definizione formale}
+Sia G la formula obiettivo; Il calcolo RGD(G) è un procedimento per inferire la non-provabilità di G in $GD_k$ ed è pensato per supportare una ricerca in avanti di una refutazione.\\
+Il calcolo agisce sui RGD(G)-sequenti che hanno la forma $\Gamma \not\Rightarrow_k \Lambda; \Delta$, dove:
+\begin{itemize}
+    \item Se $k = 0$, allora $\Lambda = \emptyset$
+    \item Se $k \geq 0$, allora $\Gamma \subseteq SL^{at,\Rightarrow}(G)$, $\Lambda \subseteq SL^{at}(G) \cap SR^{at}(G)$, $\Delta \subseteq SR^{at,\Rightarrow}(G)$
+\end{itemize}
+Il rango di $\sigma = \Gamma \not\Rightarrow_k \Lambda; \Delta$, identificato da Rn($\sigma$), è k. Un sequente è un'entità della logica che permette di esprimere legami tra asserzioni.
+
+Il calcolo è una procedura che si compone di più fasi. Dato un obiettivo G, i passaggi che deve eseguire sono:
+\begin{itemize}
+    \item Creazione degli assiomi di partenza che comporranno un sequente del tipo: $\Gamma^{at} \not\Rightarrow_0 \bullet; \Delta^{at}, \bot$ (gli assiomi sono le regole senza premesse)
+    \item Applicazione ciclica di tutte le possibili regole ai sequenti collezionati nei passaggi precedenti. Le regole possono essere di 3 tipi:
+          \begin{itemize}
+              \item Regola sinistra ($L\supset$): Viene aggiunta una nuova formula del tipo $A \Rightarrow B$ nella parte sinistra del sequente, che corrisponde all'insieme $\Gamma$. La formula scelta, deve rispettare determinate condizioni per poter essere aggiunta all'insieme $\Gamma$, ossia:
+                    \begin{itemize}
+                        \item Caso $\Lambda = \emptyset$:
+                              \begin{itemize}
+                                  \item La formula NON deve essere compresa nell'insieme unione tra $\Gamma$ e $\Delta$ ($A \Rightarrow B \notin \Gamma \cup \Delta$)
+                                  \item Il primo operatore dell'implicazione deve appartenere alla chiusura negativa di $\Delta$ ($A \in Cl^{-}(\Delta)$)
+                              \end{itemize}
+                        \item Altrimenti:
+                              \begin{itemize}
+                                  \item La formula NON deve essere compresa nell'insieme unione tra $\Gamma$ e $\Delta$ ($A \Rightarrow B \notin \Gamma \cup \Delta$)
+                                  \item Il primo operatore dell'implicazione deve appartenere alla chiusura negativa dell'unione tra $\Delta$ e $\Lambda$ ($A \in Cl^{-}(\Delta \cup \Lambda)$)
+                                  \item Il secondo operatore dell'implicazione deve appartenere alla chiusura positiva dell'unione tra $\Gamma$ e $\Lambda$ ($B \in Cl^{+}(\Gamma \cup \Lambda)$)
+                              \end{itemize}
+                    \end{itemize}
+              \item Regola destra ($R\supset$): Viene aggiunta una nuova formula del tipo $A \Rightarrow B$ nella parte destra del sequente, che corrisponde all'insieme $\Delta$. La formula scelta, deve rispettare determinate condizioni per poter essere aggiunta all'insieme $\Delta$, ossia:
+                    \begin{itemize}
+                        \item La formula NON deve essere compresa nell'insieme unione tra $\Delta$ e $\Delta$ ($A \Rightarrow B \notin \Delta \cup \Delta$)
+                        \item Il primo operatore dell'implicazione deve appartenere alla chiusura positiva dell'insieme $\Gamma$ ($A \in Cl^{+}(\Gamma)$)
+                        \item Il secondo operatore dell'implicazione deve appartenere alla chiusura negativa dell'unione tra $\Delta$ e $\Lambda$ ($B \in Cl^{-}(\Delta \cup \Lambda)$)
+                    \end{itemize}
+              \item Regola "successore": In termini di costruzione del contro-modello, questa regola corrisponde all'espansione di un modello, tramite aggiunta di una nuova radice al posto di quella corrente. A livello di sequenti, si tratta di generare tutti i possibili insiemi $\Lambda^{'}$ che rispettano una certa regola e di verificare, reiterando l'algoritmo per ognuno di essi, se ce n'è uno che porta alla soluzione. Per ogni $\Lambda^{'}$, si eliminano da $\Gamma$ gli elementi in comune e si aggiungono in $\Lambda$. Dopodichè si aggiunge l'intero $\Lambda$ originale a $\Delta$. I criteri con cui vengono generati i $\Lambda^{'}$ sono:
+                    \begin{itemize}
+                        \item L'insieme deve essere sotto-insieme/uguale all'intersezione di $\Gamma$ e l'insieme delle variabili proposizionali V e non deve essere vuoto ($\emptyset \subset \Lambda^{'} \subseteq \Gamma \cap V$).
+                        \item Questa regola va applicata SOLO quando il sequente è saturo (ossia quando non è possibile aggiungere nuove formule nè a sinistra nè a destra)
+                    \end{itemize}
+          \end{itemize}
+\end{itemize}
+
+Le condizioni per la terminazione sono due:
+\begin{itemize}
+    \item Gli insiemi di sotto-formule sinistre e destre dell'obiettivo hanno finito gli elementi (e quindi sarebbe impossibile trovare nuove implicazioni da aggiungere)
+    \item Quando si ottiene un sequente che rispetta la seguente regola: $G \in Cl^{-}(\Delta \cup \Lambda)$
+\end{itemize}
+
+\subsubsection{Procedura}
+Il modulo predisposto all'implementazione dell'algoritmo è il modulo \textit{Calculus} all'interno del namespace \textit{Algorithm}. Il modulo contiene la definizione delle funzioni per l'estrapolazione di alcuni tipi di formule da una lista e la funzione ricorsiva dell'algormitmo vero e proprio. Le funzioni sono:
+\begin{itemize}
+    \item \textbf{atoms:} Funzione che data una lista di Formule restituisce solamente le variabili proposizionali contenute all'interno. Gli atomi vengono ricercati ricorsivamente formula per formula per ottenere una lista contenente TUTTI gli atomi presenti in totale.
+    \item \textbf{imps:} Funzione che data una lista di Formule restituisce solamente le implicazioni (formule della forma $A \Rightarrow B$). A differenza della funzione \textbf{atoms}, la ricerca avviene solo superficialmente nella lista, senza ricerca ricorsiva nelle singole formule.
+    \item \textbf{printResult:} Funzione che prende in input il risultato dell'algoritmo, ossia un F\# \cite{fsharp} \textit{option type} con tipo generico impostato a lista di tuple con 5 elementi, e stampa a video i singoli passaggi e regole applicate solamente del percorso corretto. Tutti i tentativi che non hanno avuto successo vengono ignorati.
+    \item \textbf{execute:} Funzione che prende in input una formula G rappresentante l'obiettivo e restituisce un \textit{option type} della lista di passaggi, a loro volta rappresentati da una tupla formata da:
+          \begin{itemize}
+              \item \textbf{Rule}: La regola applicata nel passaggio corrente, che può essere: Ax(Assioma), Left(regola sinistra), Right(regola destra) e Succ(regola successore)
+              \item \textbf{Sequente}: Il sequente composto dai tre insiemi gamma, lambda e Delta
+              \item \textbf{Indice}: L'indice k che identifica il passaggio
+          \end{itemize}
+          Rappresenta l'algoritmo stesso e fa uso di alcune sotto-funzioni implicite che sono rispettivamente:
+          \begin{itemize}
+              \item \textbf{combinations}: Una funzione che data una lista di Formule, restituisce una lista di liste di formule, ossia tutte le possibili combinazioni dei suoi elementi.
+              \item \textbf{generateAxioms}: Una funzione che data una lista di formule che rappresentano tutte le sottoformule di G, restituisce una lista di tuple che rappresentano tutte le combinazioni tra esse, sotto forma di sequenti (tuple con i 3 insiemi $\Gamma$, $\Lambda$ e $\Delta$). Stando alle regole descritte nelle sezioni precedenti, l'insieme $\Lambda$ sarà sempre vuoto inizialmente, mentre l'insieme $\Delta$ conterrà la costante $\bot$
+              \item \textbf{proof}: Una funzione che prende in input l'obiettivo G, i tre insiemi che rappresentano il sequente corrente, le liste di sotto-formule sinistre e destre, l'indice k che rappresenta il passaggio corrente ed un accumulatore che salva tutti i passaggi percorsi. Questo accumulatore servirà sia da output della funzione, sia per tenere conto SOLO dei passaggi che hanno portato al risultato e non di quelli superflui od errati
+          \end{itemize}
+\end{itemize}
+La procedura inizia estrapolando tutte le sotto-formule dell'obiettivo G, per poi dividerle nei due gruppi sinistre e destre. Questo avviene grazie al metodo \textit{subFormula} del modulo \textit{Expression}. \\
+Una volta ottenuta la divisione tra sotto-formule, vengono estrapolate, per ogni raggruppamento, solamente le sotto-formule che rispettano la forma $A \Rightarrow B$, in quanto l'algoritmo opera solamente con le formule di implicazione. Come descritto in precedenza, anche la formula $\not A$ rappresenta una implicazione, in quanto $\not A = A \Rightarrow \bot$. \\
+Poi è necessario generare gli assiomi, ossia le regole di partenza senza premesse. La generazione avviene tramite la funzione \textit{generateAxioms} che mi restituisce la lista di sequenti, dove ogni sequente rappresenta un assioma da cui partire. \\
+Una volta ottenuti anche gli assiomi, si può procedere con il calcolo di refutazione. Il punto di partenza è la funzione ricorsiva \textit{loop}, che prende in input l'obiettivo G, le liste di sotto-formule e la lista di sequenti. A questo punto viene eseguito un controllo:
+\begin{itemize}
+    \item Se la lista di assiomi è vuota: l'algoritmo termina immediatamente in quanto, senza assiomi, non sarebbe nemmeno possibile partire
+    \item Altrimenti: Si scorre la lista di assiomi eseguendo la funzione \textit{proof}, descritta sopra, con un assioma alla volta. Prima di richiamare quella funzione, vengono effettuati dei controlli su ogni assioma per capire se può essere utilizzato come punto di partenza della costruzione del contro-modello. Le regole che compongono i controlli sono:
+          \begin{itemize}
+              \item $\Gamma^{at} \cup \Delta^{at} = Sf^{at}(G)$
+              \item $\Gamma^{at} \cap \Delta^{at} = \emptyset$
+          \end{itemize}
+          Se un dato assioma non dovesse rispettare queste condizioni, si passa ad analizzare l'assioma successivo e così via. Altrimenti, si richiama la funzione \textit{proof} passando l'obiettivo G, i 3 insiemi che compongono l'assioma-sequente, le liste di sotto-formule, l'indice del passaggio di partenza, che sarà sempre 0, e come accumulatore storico dei passaggi, il primo passaggio che sarà caratterizzato da un passaggio di tipo \textit{Ax}. \\
+          La prima operazione eseguita dalla funzione \textit{proof}, è quella di controllare se la condizione di fine è stata rispettata. Se lo è, l'algoritmo termina restituendo lo storico dei passaggi, altrimenti si procede ad applicare tutte le regole possibili (sinistra, destra, successore) ai sequenti collezionati nei passaggi precedenti, richiamando ricorsivamente \textit{proof}
+\end{itemize}
+
+\subsection{Word}
+Il modulo \textit{Word} contiene la definizione di alcune funzioni di utilità per la trasformazione di stringhe:
+\begin{itemize}
+    \item \textbf{split:} Funzione che data una stirnga che rappresenta una parola ed un array di caratteri che rappresentano delle regole, restituisce un array di stringhe dato dalla divisione della parola in multiple parole in base alle regole fornite in input.
+    \item \textbf{tokenize:} Funzione che data una stringa che rappresenta una parola, restituisce una lista di caratteri, ossia i caratteri di cui è composta la parola in ingresso.
+\end{itemize}
+
+\end{document}

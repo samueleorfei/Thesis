@@ -1,0 +1,24 @@
+\documentclass{oist}
+\addbibresource{bibtex.bib}
+
+\begin{document}
+
+\subfile{\main/chapters/title}
+\subfile{\main/chapters/abstract}
+\subfile{\main/chapters/abbreviations}
+
+\tableofcontents
+\addcontentsline{toc}{chapter}{Tabella dei contenuti}
+
+\subfile{\main/chapters/introduction.tex}
+\subfile{\main/chapters/tools.tex}
+\subfile{\main/chapters/preliminaries.tex}
+\subfile{\main/chapters/design.tex}
+\subfile{\main/chapters/implementation.tex}
+\subfile{\main/chapters/pseudocode.tex}
+\subfile{\main/chapters/conclusion.tex}
+
+\printbibliography
+\addcontentsline{toc}{part}{Bibliografia}
+
+\end{document}
