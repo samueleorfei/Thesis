@@ -17,66 +17,73 @@ Le funzioni di utilità utilizzate sono:
 
 \subsection{atoms}
 Qui verrà presentato lo pseudocodice per la funzione \textit{atoms}, incaricata di estrapolare ricorsivamente tutte le possibili variabili proposizionali da una lista di formule. \\
+Esempio: \\
+\textbf{Input:} [($A \Rightarrow B$), ($C \lor B$), ($D \lor A \land C$)] \\
+\textbf{Risultato:} $\{A, B, C, D\}$
 
 \begin{algorithm}
     \caption{Pseudocodice per la funzione \textbf{atoms}}\label{alg:atoms}
     \begin{algorithmic}
-        \Function{atoms}{set}
-        \Function{single}{acc, f}
-        \If{$f = Atom$}
-        \State \textbf{return} concat(acc, [f])
-        \ElsIf{$f = \bot$}
-        \State \textbf{return} acc
-        \Else
-        \State \textbf{single}(acc, sottoFormule di f)
+        \Ensure result senza duplicati
+        \Function{atoms}{S: insieme di formule}
+        \State $result \gets \emptyset$
+        \ForAll{$f \in S$}
+        \State $ats \gets \textbf{estraggo gli atomi dalla formula f}$
+        \ForAll{$a \in ats$}
+        \If{$a \notin result$}
+        \State $result \gets result \cup \{a\}$
         \EndIf
-        \State \textbf{return} acc
-        \EndFunction
-        \ForAll{$f \in set$}
-        \State $f \gets \textbf{single}([], f)$
         \EndFor
-        \State \textbf{return} set
+        \EndFor
+        \State \textbf{return} result
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
 
 \subsection{imps}
 Qui verrà presentato lo pseudocodice per la funzione \textit{imps}, incaricata di estrapolare ricorsivamente tutte le possibili formula dalla forma $A \Rightarrow B$ da una lista di formule. \\
+Esempio: \\
+\textbf{Input:} [($A \Rightarrow B$), ($C \lor B$), ($D \lor A \land C$), ($\neg A$)] \\
+\textbf{Risultato:} $\{(A \Rightarrow B), (\neg A)\}$
 
 \begin{algorithm}
     \caption{Pseudocodice per la funzione \textbf{imps}}\label{alg:imps}
     \begin{algorithmic}
-        \Require $set \neq \emptyset$
-        \Ensure res senza duplicati
-        \State $res = \emptyset$
-        \State $i = 0$
-        \While{$set \neq \emptyset$}
-        \State $x = set[i]$
-        \If{$x$ is $\neg$ or $\Rightarrow$}
-        aggiungi x a res
-        \State $i = i + 1$
+        \Ensure result senza duplicati
+        \Function{atoms}{S: insieme di formule}
+        \State $result \gets \emptyset$
+        \ForAll{$f \in S$}
+        \State $ats \gets \textbf{estraggo le implicazioni dalla formula f}$
+        \ForAll{$a \in ats$}
+        \If{$a \notin result$}
+        \State $result \gets result \cup \{a\}$
         \EndIf
-        \EndWhile
+        \EndFor
+        \EndFor
+        \State \textbf{return} result
+        \EndFunction
     \end{algorithmic}
 \end{algorithm}
 
 \subsection{combinations}
 Qui verrà presentato lo pseudocodice per la funzione \textit{combinations}, incaricata di creare tutte le combinazioni possibili degli elementi di una lista di formule e di restituirle sotto forma di lista di liste di formule. \\
+Esempio: \\
+\textbf{Input:} [$A, B, C$] \\
+\textbf{Risultato:} [[$A$], [$B$], [$C$], [$A, B$], [$A, C$], [$B, C$], [$A, B, C$]]
 
 \begin{algorithm}
     \caption{Pseudocodice per la funzione \textbf{combinations}}\label{alg:combinations}
     \begin{algorithmic}
-        \Function{combinations}{lst}
-        \Function{comb}{accLst, elemLst}
-        \Repeat
-        \State $top \gets \textbf{pop}(elemLst)$
-        \State $res \gets $ concatenazione di $top$ davanti ad ogni elemento di $concat(accList, accList)$
-        \State $next \gets \textbf{concat}(top, res)$
-        \State comb(next, elemLst)
-        \Until{$elemLst$ is empty}
-        \State \textbf{return} accList
-        \EndFunction
-        \State \textbf{return} comb([], lst)
+        \Function{combinations}{L: lista di formule}
+        \State $result \gets \emptyset$
+        \ForAll{$f \in L$}
+        \State $temp \gets result \cup result$
+        \ForAll{$e \in temp$}
+        \State $e \gets \textbf{concatenazione}(f, e)$
+        \EndFor
+        \State $result \gets \textbf{concatenazione}(result, temp)$
+        \EndFor
+        \State \textbf{return} result
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
@@ -91,17 +98,20 @@ Il calcolo di refutazione è composto da 3 funzioni principali:
 
 \subsection{generateAxioms}
 Qui verrà presentato lo pseudocodice per la funzione \textit{generateAxioms}, incaricata di creare tutti gli assiomi possibili che avranno la forma di sequenti. \\
+Esempio: \\
+\textbf{Input:} [($A \Rightarrow B$), ($C \lor B$), ($D \lor A \land C$), ($\neg A$)] \\
+\textbf{Risultato:} [($\{\}, \emptyset, \{A, B, C, \bot\}$), [$(\{A\}, \emptyset, \{B, C, \bot\})$], [$(\{A, B\}, \emptyset, \{C, \bot\})$], [$(\{A, B, C\}, \emptyset, \{\bot\})$]]
 
 \begin{algorithm}
     \caption{Pseudocodice per la funzione \textbf{generateAxioms}}\label{alg:generateAxioms}
     \begin{algorithmic}
-        \Function{generateAxioms}{subFormulas}
-        \State $atomSF \gets \textbf{atoms}(subFormulas)$
-        \State $combs \gets \textbf{combinations}(atomSF)$
-        \ForAll{$x \in combs$}
-        \State $x \gets (\{x\}, \emptyset, \{\bot, \{atomSF\} - \{x\}\})$
+        \Function{generateAxioms}{L: lista di formule}
+        \State $atomi \gets \textbf{atoms}(L)$
+        \State $combinazioni \gets \textbf{combinations}(atomi)$
+        \ForAll{$x \in combinazioni$}
+        \State $x \gets (\{x\}, \emptyset, \{\bot, \{atomi\} - \{x\}\})$
         \EndFor
-        \State \textbf{return} \textbf{concat}(combs, [($\emptyset, \emptyset, \{atomSF, \bot\}$)])
+        \State \textbf{return} $combinazioni \cup \{(\emptyset, \emptyset, \{atomi, \bot\})\}$
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
