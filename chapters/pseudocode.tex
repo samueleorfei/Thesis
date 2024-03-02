@@ -119,7 +119,6 @@ Esempio: \\
 \subsection{execute}
 Qui verrà presentato lo pseudocodice per la funzione \textit{execute}, che rappresenta il vero e proprio calcolo di refutazione. Una volta creati gli assiomi iniziali, applica tutte le regole a tutti i sequenti generati negli step successivi fino ad ottenere un sequente che rispetta le condizioni di interruzione. \\
 
-\begin{comment}
 \begin{algorithm}
     \caption{Pseudocodice per la funzione \textbf{proof}}\label{alg:proof}
     \begin{algorithmic}
@@ -133,13 +132,12 @@ Qui verrà presentato lo pseudocodice per la funzione \textit{execute}, che rapp
         \State \textbf{return} null
         \Else
         \State $result \gets null$
-        \ForAll{$comb \in \textbf{combinations(\Lambda^{'})}$}
+        \ForAll{$comb \in combinations(\Lambda^{'})$}
         \State $nG \gets \Gamma - comb$
         \State $nD \gets \Delta \cup \Lambda$
         \State $nK \gets k + 1$
         \State $nH \gets \textbf{concat}(history, [(Succ, bG, comb, nD, nK)])$
         \State $result \gets \textbf{proof}(G, nG, nD, comb, sl, sr, nK, nH)$
-
         \If{$result \neq null$}
         \State \textbf{return} result
         \Else
@@ -157,7 +155,6 @@ Qui verrà presentato lo pseudocodice per la funzione \textit{execute}, che rapp
 
         \State{$lR \gets \textbf{proof}(G, nG, \Lambda, \Delta, \{sl - lF\}, sr, k, lH)$}
         \State{$rR \gets \textbf{proof}(G, \Gamma, \Lambda, nD, sl, \{sr - rF\}, k, rH)$}
-
         \If{$lR \neq null \land rR \neq null$}
         \State \textbf{return} lR
         \ElsIf{$lR = null \land rR \neq null$}
@@ -172,7 +169,6 @@ Qui verrà presentato lo pseudocodice per la funzione \textit{execute}, che rapp
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
-\end{comment}
 
 \begin{algorithm}
     \caption{Pseudocodice per la funzione \textbf{execute}}\label{alg:execute}
