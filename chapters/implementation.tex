@@ -141,54 +141,6 @@ Le funzioni \textit{parseOperator, parseParenthesis, parseTerm, parseExpression}
 
 \subsection{Calculus}
 
-\subsubsection{Definizione formale}
-Sia G la formula obiettivo; Il calcolo RGD(G) è un procedimento per inferire la non-provabilità di G in $GD_k$ ed è pensato per supportare una ricerca in avanti di una refutazione.\\
-Il calcolo agisce sui RGD(G)-sequenti che hanno la forma $\Gamma \not\Rightarrow_k \Lambda; \Delta$, dove:
-\begin{itemize}
-    \item Se $k = 0$, allora $\Lambda = \emptyset$
-    \item Se $k \geq 0$, allora $\Gamma \subseteq SL^{at,\Rightarrow}(G)$, $\Lambda \subseteq SL^{at}(G) \cap SR^{at}(G)$, $\Delta \subseteq SR^{at,\Rightarrow}(G)$
-\end{itemize}
-Il rango di $\sigma = \Gamma \not\Rightarrow_k \Lambda; \Delta$, identificato da Rn($\sigma$), è k. Un sequente è un'entità della logica che permette di esprimere legami tra asserzioni.
-
-Il calcolo è una procedura che si compone di più fasi. Dato un obiettivo G, i passaggi che deve eseguire sono:
-\begin{itemize}
-    \item Creazione degli assiomi di partenza che comporranno un sequente del tipo: $\Gamma^{at} \not\Rightarrow_0 \bullet; \Delta^{at}, \bot$ (gli assiomi sono le regole senza premesse)
-    \item Applicazione ciclica di tutte le possibili regole ai sequenti collezionati nei passaggi precedenti. Le regole possono essere di 3 tipi:
-          \begin{itemize}
-              \item Regola sinistra ($L\supset$): Viene aggiunta una nuova formula del tipo $A \Rightarrow B$ nella parte sinistra del sequente, che corrisponde all'insieme $\Gamma$. La formula scelta, deve rispettare determinate condizioni per poter essere aggiunta all'insieme $\Gamma$, ossia:
-                    \begin{itemize}
-                        \item Caso $\Lambda = \emptyset$:
-                              \begin{itemize}
-                                  \item La formula NON deve essere compresa nell'insieme unione tra $\Gamma$ e $\Delta$ ($A \Rightarrow B \notin \Gamma \cup \Delta$)
-                                  \item Il primo operatore dell'implicazione deve appartenere alla chiusura negativa di $\Delta$ ($A \in Cl^{-}(\Delta)$)
-                              \end{itemize}
-                        \item Altrimenti:
-                              \begin{itemize}
-                                  \item La formula NON deve essere compresa nell'insieme unione tra $\Gamma$ e $\Delta$ ($A \Rightarrow B \notin \Gamma \cup \Delta$)
-                                  \item Il primo operatore dell'implicazione deve appartenere alla chiusura negativa dell'unione tra $\Delta$ e $\Lambda$ ($A \in Cl^{-}(\Delta \cup \Lambda)$)
-                                  \item Il secondo operatore dell'implicazione deve appartenere alla chiusura positiva dell'unione tra $\Gamma$ e $\Lambda$ ($B \in Cl^{+}(\Gamma \cup \Lambda)$)
-                              \end{itemize}
-                    \end{itemize}
-              \item Regola destra ($R\supset$): Viene aggiunta una nuova formula del tipo $A \Rightarrow B$ nella parte destra del sequente, che corrisponde all'insieme $\Delta$. La formula scelta, deve rispettare determinate condizioni per poter essere aggiunta all'insieme $\Delta$, ossia:
-                    \begin{itemize}
-                        \item La formula NON deve essere compresa nell'insieme unione tra $\Delta$ e $\Delta$ ($A \Rightarrow B \notin \Delta \cup \Delta$)
-                        \item Il primo operatore dell'implicazione deve appartenere alla chiusura positiva dell'insieme $\Gamma$ ($A \in Cl^{+}(\Gamma)$)
-                        \item Il secondo operatore dell'implicazione deve appartenere alla chiusura negativa dell'unione tra $\Delta$ e $\Lambda$ ($B \in Cl^{-}(\Delta \cup \Lambda)$)
-                    \end{itemize}
-              \item Regola "successore": In termini di costruzione del contro-modello, questa regola corrisponde all'espansione di un modello, tramite aggiunta di una nuova radice al posto di quella corrente. A livello di sequenti, si tratta di generare tutti i possibili insiemi $\Lambda^{'}$ che rispettano una certa regola e di verificare, reiterando l'algoritmo per ognuno di essi, se ce n'è uno che porta alla soluzione. Per ogni $\Lambda^{'}$, si eliminano da $\Gamma$ gli elementi in comune e si aggiungono in $\Lambda$. Dopodichè si aggiunge l'intero $\Lambda$ originale a $\Delta$. I criteri con cui vengono generati i $\Lambda^{'}$ sono:
-                    \begin{itemize}
-                        \item L'insieme deve essere sotto-insieme/uguale all'intersezione di $\Gamma$ e l'insieme delle variabili proposizionali V e non deve essere vuoto ($\emptyset \subset \Lambda^{'} \subseteq \Gamma \cap V$).
-                        \item Questa regola va applicata SOLO quando il sequente è saturo (ossia quando non è possibile aggiungere nuove formule nè a sinistra nè a destra)
-                    \end{itemize}
-          \end{itemize}
-\end{itemize}
-
-Le condizioni per la terminazione sono due:
-\begin{itemize}
-    \item Gli insiemi di sotto-formule sinistre e destre dell'obiettivo hanno finito gli elementi (e quindi sarebbe impossibile trovare nuove implicazioni da aggiungere)
-    \item Quando si ottiene un sequente che rispetta la seguente regola: $G \in Cl^{-}(\Delta \cup \Lambda)$
-\end{itemize}
-
 \subsubsection{Procedura}
 Il modulo predisposto all'implementazione dell'algoritmo è il modulo \textit{Calculus} all'interno del namespace \textit{Algorithm}. Il modulo contiene la definizione delle funzioni per l'estrapolazione di alcuni tipi di formule da una lista e la funzione ricorsiva dell'algormitmo vero e proprio. Le funzioni sono:
 \begin{itemize}

@@ -4,9 +4,11 @@
 \chapter{Pseudocodice}
 \addcontentsline{toc}{chapter}{Pseudocodice}
 
-In questa sezione verranno mostrate le funzioni principali per il funzionamento dell'algoritmo sotto forma di pseudocodice.
+In questa sezione verranno mostrate le funzioni principali dell'algoritmo sotto forma di pseudocodice.
 
 \section{Utilità}
+
+Le funzioni di utilità sono delle funzioni utilizzate per svolgere compiti minori come estrazione di informazioni da una formula o per ricombinare le strutture dati. \\
 
 Le funzioni di utilità utilizzate sono:
 \begin{itemize}
@@ -14,6 +16,8 @@ Le funzioni di utilità utilizzate sono:
     \item \textbf{imps}
     \item \textbf{combinations}
 \end{itemize}
+
+\newpage
 
 \subsection{atoms}
 Qui verrà presentato lo pseudocodice per la funzione \textit{atoms}, incaricata di estrapolare ricorsivamente tutte le possibili variabili proposizionali da una lista di formule. \\
@@ -65,6 +69,8 @@ Esempio: \\
     \end{algorithmic}
 \end{algorithm}
 
+\newpage
+
 \subsection{combinations}
 Qui verrà presentato lo pseudocodice per la funzione \textit{combinations}, incaricata di creare tutte le combinazioni possibili degli elementi di una lista di formule e di restituirle sotto forma di lista di liste di formule. \\
 Esempio: \\
@@ -88,7 +94,12 @@ Esempio: \\
     \end{algorithmic}
 \end{algorithm}
 
+\newpage
+
 \section{Calculus}
+
+Di seguito verranno presentate le funzioni principali per lo sviluppo del calcolo di refutazione. Queste funzioni hanno il compito di generare gli assiomi di partenza del calcolo e di costruire il contro-modello per una data formula. \\
+
 Il calcolo di refutazione è composto da 3 funzioni principali:
 \begin{itemize}
     \item \textbf{generateAxioms}
@@ -116,8 +127,36 @@ Esempio: \\
     \end{algorithmic}
 \end{algorithm}
 
+\newpage
+
 \subsection{execute}
 Qui verrà presentato lo pseudocodice per la funzione \textit{execute}, che rappresenta il vero e proprio calcolo di refutazione. Una volta creati gli assiomi iniziali, applica tutte le regole a tutti i sequenti generati negli step successivi fino ad ottenere un sequente che rispetta le condizioni di interruzione. \\
+
+\begin{algorithm}
+    \caption{Pseudocodice per la funzione \textbf{execute}}\label{alg:execute}
+    \begin{algorithmic}
+        \Function{execute}{goal}
+        \State $(sl, sr) \gets \textbf{subFormulas}(goal)$
+        \State $sf \gets \textbf{concat}(sl, sr)$
+        \State $impSL \gets \textbf{imps}(sl)$
+        \State $impSR \gets \textbf{imps}(sr)$
+        \State $axioms \gets \textbf{generateAxioms}(sf)$
+        \State $result = null$
+        \ForAll{$(Rule, \Gamma, \Lambda, \Delta, k) \in axioms$}
+        \If{($\Gamma^{at} \cup \Delta^{at} = Sf^{at}(G)) \land (\Gamma^{at} \cap \Delta^{at} = \emptyset)$}
+        \State $result = \textbf{proof}(goal, \Gamma, \Delta, \Lambda, sl, sr, 0, [(Ax, \Gamma, \Lambda, \Delta, 0)])$
+        \Else
+        \State \textbf{continue}
+        \EndIf
+
+        \If{$result \neq null$}
+        \State \textbf{break}
+        \EndIf
+        \EndFor
+        \State \textbf{return} result
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
 
 \begin{algorithm}
     \caption{Pseudocodice per la funzione \textbf{proof}}\label{alg:proof}
@@ -170,31 +209,7 @@ Qui verrà presentato lo pseudocodice per la funzione \textit{execute}, che rapp
     \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}
-    \caption{Pseudocodice per la funzione \textbf{execute}}\label{alg:execute}
-    \begin{algorithmic}
-        \Function{execute}{goal}
-        \State $(sl, sr) \gets \textbf{subFormulas}(goal)$
-        \State $sf \gets \textbf{concat}(sl, sr)$
-        \State $impSL \gets \textbf{imps}(sl)$
-        \State $impSR \gets \textbf{imps}(sr)$
-        \State $axioms \gets \textbf{generateAxioms}(sf)$
-        \State $result = null$
-        \ForAll{$(Rule, \Gamma, \Lambda, \Delta, k) \in axioms$}
-        \If{($\Gamma^{at} \cup \Delta^{at} = Sf^{at}(G)) \land (\Gamma^{at} \cap \Delta^{at} = \emptyset)$}
-        \State $result = \textbf{proof}(goal, \Gamma, \Delta, \Lambda, sl, sr, 0, [(Ax, \Gamma, \Lambda, \Delta, 0)])$
-        \Else
-        \State \textbf{continue}
-        \EndIf
-
-        \If{$result \neq null$}
-        \State \textbf{break}
-        \EndIf
-        \EndFor
-        \State \textbf{return} result
-        \EndFunction
-    \end{algorithmic}
-\end{algorithm}
+\newpage
 
 \subsection{printResult}
 Qui verrà presentato lo pseudocodice per la funzione \textit{printResult}, che prende in input il risultato della funzione \textit{execute} e stampa sul terminale gli step che hanno portato alla costruzione del contro-modello indentati in maniera comprensibile. \\
