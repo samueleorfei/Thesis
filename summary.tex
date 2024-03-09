@@ -1,0 +1,58 @@
+\documentclass{oist}
+\begin{document}
+
+\pagestyle{empty}
+\begin{titlepage}
+    \AddToShipoutPicture*{	\put(-245,-180){%
+            \parbox[b][\paperheight]{\paperwidth}{%
+                \vfill
+                \centering
+                \includegraphics[width=0.95\paperwidth]{./images/symbol.png}%
+                \vfill
+            }}}
+    \begin{center}
+        \vfill
+        {\large \scshape Università degli studi di Milano}\\[0.1cm]
+        {\large \scshape Computer science department}\\[0.5cm]
+        \rule{\textwidth}{1.5pt}\\[0cm]
+        {\huge \bfseries  Implementazione di un algoritmo per il calcolo di refutazione per controllare la non-provabilità di una formula nella logica di G\"odel-Dummet \par \ }\\[-0.5cm]
+        \rule{\textwidth}{1.5pt}\\[2.5cm]
+        {\hfill \large Autore: \textbf{Samuele Orfei}} \\
+        \vspace{0.1cm}
+        {\hfill \large 922867} \\
+        \vspace{0.5cm}
+        {\hfill \large Relatore: \textbf{Camillo Fiorentini}} \\
+        \vspace{1cm}
+        \hfill  10/2023
+    \end{center}
+\end{titlepage}
+
+\section*{Riassunto}
+
+L'elaborato si occupa di descrivere, sia tramite definizione formale (matematica), che tramite definizione pratica mediante l'uso di un linguaggio di programmazione funzionale, un calcolo di refutazione per dimostrare la non-provabilità di una formula. Dalle refutazione sarà poi possibile estrapolare dei contro-modelli per le formule non provabili. \\
+Lo scopo è quello di ottenere una implementazione del calcolo di refutazione mediante il linguaggio F\# per poter avere uno strumento utilizzabile per la costruzione di contromodelli. \\
+Viene fatto particolare riferimento alla famiglia di logiche chiamate di G\"odel-Dummett, in quanto, essendo caratterizzata da modelli lineari, è stata studiata a lungo per le sue relazioni con la logica fuzzy e per la sua capacità computazionale. \\
+La prima sezione dell'elaborato si occupa di dare una definizione formale (matematica) del calcolo, di ogni suo passaggio e delle sue regole. Ci sono inoltre le definizioni formali di alcuni strumenti matematici utilizzati in alcuni passaggi del calcolo come le chiusure e le sotto-formule.
+
+Successivamente c'è una sezione dedicata allo pseudocodice delle principali funzioni implementate. Sono state selezionate le funzioni più significative e, nonostante l'implementazione sia in linguaggio F\# funzionale, ne è stata data la definizione mediante pseudocodice basato sul paradigma di programmazione procedurale (C-like). \\
+Per ogni pseudocodice è stata fornita una breve spiegazione e le funzioni sono state divise a seconda dello scopo. Inoltre, per le funzioni di utilità più generiche, è stato fornito anche un esempio di input ed output.
+
+La terza sezione contiene una descrizione riguardante il come è stata organizzata la soluzione e quali strumenti sono stati utilizzati per lo sviluppo. Il codice è stato scritto con la modularità in mente per poter, eventualmente, riutilizzare parti di codice anche al di fuori del progetto. Gli strumenti utilizzati sono:
+\begin{itemize}
+    \item \textbf{Github:} Per il versionamento del codice
+    \item \textbf{.NET:} Come framework di sviluppo che fornisce sia il linguaggio F\# che le librerie contenti le strutture dati di base
+    \item \textbf{Visual Studio Code:} Come IDE di sviluppo
+\end{itemize}
+
+La quarta sezione contiene la descrizione dei vari moduli implementati con le relative funzioni e/o tipi. \\
+Particolare attenzione è stata posta al tipo \textit{Formula} in quanto rappresenta il punto centrale di tutto il progetto. Tramite la \textit{Formula} è possibile rappresentare, sotto forma di albero, tutte le formule logiche e relativi operatori. \\
+Quanto ai moduli invece, particolarmente importanti sono i moduli \textit{Expression} e \textit{Calculus} che contengono rispettivamente:
+\begin{itemize}
+    \item Le funzioni per l'estrapolazione di sotto-formule o controllo di appartenenza a chiusure positive o negative
+    \item Le funzioni per l'implementazione dell'algoritmo vero e proprio
+\end{itemize}
+
+La quinta sezione contiene la conclusione e la bibliografia. \\
+La ricerca bibliografica ha riguardato principalmente i siti internet delle case madri dei software elencati sopra (.NET, Github, F\#) ed una pubblicazione su \textit{AIR} (Archivio Istituzionale della Ricerca) intitolato \textit{Forward refutation for G\"odel-Dummett Logics}. \\
+
+\end{document}
