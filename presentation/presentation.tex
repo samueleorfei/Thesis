@@ -1,0 +1,154 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% I, the copyright holder of this work, release this work into the
+%% public domain. This applies worldwide. In some countries this may
+%% not be legally possible; if so: I grant anyone the right to use
+%% this work for any purpose, without any conditions, unless such
+%% conditions are required by law.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass{beamer}
+\usetheme[university=bs,faculty=standard]{fibeamer}
+\usepackage[utf8]{inputenc}
+\usepackage[
+  main=italian, %% By using `italian`as the main locale
+                %% instead of `english`, you can typeset the
+                %% presentation in Italian.
+  english       %% The additional key allow foreign texts to be
+]{babel}        %% typeset as follows:
+%%
+%%   \begin{otherlanguage}{italian}   ... \end{otherlanguage}
+%%
+%% These macros specify information about the presentation
+\title{Implementazione di un algoritmo per il calcolo di refutazione per controllare la non-provabilità di una formula nella logica di G\"odel-Dummet} %% that will be typeset on the
+%\subtitle{Presentation Subtitle} %% title page.
+\author{Samuele Orfei}
+
+%% These additional packages are used within the document:
+\usepackage{ragged2e}  % `\justifying` text
+\usepackage{booktabs}  % Tables
+\usepackage{tabularx}
+\usepackage{tikz}      % Diagrams
+\usetikzlibrary{calc, shapes, backgrounds}
+\usepackage{amsmath, amssymb}
+\usepackage{url}       % `\url`s
+\usepackage{listings}  % Code listings
+\usepackage{graphicx}
+
+\frenchspacing
+\begin{document}
+\frame[c]{\maketitle}
+
+\begin{darkframes}
+
+    \section{Presentazione}
+
+    \subsection{Introduzione}
+    \begin{frame}{Introduzione}
+
+        \begin{block}{Logiche di G\"odel-Dummett}
+            Famiglia di logiche dette \textit{intermedie}, caratterizzate da modelli lineari (di qualunque profondità).
+        \end{block}
+
+        Si svuole sviluppare un algoritmo che implementa un calcolo di refutazione per controllare la non-provabilità di una formula nella logica di \textit{G\"odel-Dummett}.\\
+
+    \end{frame}
+
+    \subsection{Requisiti Funzionali}
+    \begin{frame}{Requisiti Funzionali}
+
+        \textbf{Requisiti di base}
+        \begin{itemize}
+            \item Lettura della formula da standard input o file di testo
+            \item Interpretazione della formula e costruzione della rappresentazione interna
+            \item Applicazione del calcolo di refutazione e costruzione del contro-modello
+            \item Stampa dei risultati sotto forma di applicazione di regole
+        \end{itemize}
+
+        \textbf{Requisiti sui tipi}
+        \begin{itemize}
+            \item Supporto degli operatori logici $\land$, $\lor$, $\Rightarrow$, $\not$
+            \item Supporto di proposizioni atomiche e di costanti come $\bot$
+            \item Supporto di formule innestate mediante interpretazione dei caratteri parentesi: tonda, quadra e graffa
+            \item Supporto della lettura della formula sia sotto forma di stringa che di rappresentazione interna (tipo \textit{Formula})
+        \end{itemize}
+
+    \end{frame}
+
+    \subsection{Requisiti di Integrazione}
+    \begin{frame}{Requisiti di Integrazione}
+        Le caratteristiche dei moduli e dell'algoritmo:
+        \begin{itemize}
+            \item Implementato in F\# compatibile con .NET 7.0
+            \item Modularità: possibilità di riutilizzare il codice
+            \item Controllo errori: in caso di errore, restituizione di errore con informazioni di traccia
+            \item Tracciamento: le funzioni principali stampano messaggi sulle operazioni che stanno eseguendo
+        \end{itemize}
+    \end{frame}
+
+    \subsection{Teoria}
+    \begin{frame}{Definizioni formali}
+        \framesubtitle{Definizioni}
+        \begin{itemize}
+            \item Sotto-formula sinistra o destra
+            \item Chiusura positiva o negativa
+            \item Sequente: Tripla di 3 insiemi ($\Lambda, \Gamma, \Delta$)
+            \item Calcolo RGD: Precedimento ricorsivo di applicazione delle regole ai sequenti ed espansione del contro-modello
+        \end{itemize}
+
+        \framesubtitle{Regole algoritmo}
+        \begin{itemize}
+            \item Regola sinistra L->: Inserimento della sotto-formula nell'insieme sinistro del sequente
+            \item Regola destra R->: Inserimento della sotto-formula nell'insieme destro del sequente
+            \item Regola successore: Cambio di radice
+            \item Condizioni di termininazione: Elementi finiti o sequenti saturi
+        \end{itemize}
+    \end{frame}
+
+    \subsection{Strumenti}
+    \begin{frame}{Strumenti}
+        \framesubtitle{Strumenti essenziali}
+        \begin{itemize}
+            \item F\#
+            \item .NET Framework
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Strumenti}
+        \framesubtitle{Altri strumenti importanti}
+        \begin{itemize}
+            \item Librerie utilizzate durante lo sviluppo (List, Set, Map)
+            \item IDE e/o editor di testo (Visual Studio Code)
+            \item Versionamento (Github)
+        \end{itemize}
+    \end{frame}
+
+    \subsection{Struttura del progetto}
+    \begin{frame}{Struttura del progetto}
+        \begin{itemize}
+            \item Modulo \textit{Lexer} che trasforma una formula sotto forma di stringa in un insieme di \textit{Token}
+            \item Modulo \textit{Parser} che trasforma l'insieme di \textit{Token} nella rappresentazione interna della formula
+            \item Modulo \textit{Expression} che racchiude le funzioni per la manipolazione, trasformazione o estrazione di dati da una data formula
+            \item Modulo \textit{Calculus} che racchiude le funzioni che rappresentano l'algoritmo stesso
+        \end{itemize}
+    \end{frame}
+
+    \subsection{Conclusioni}
+    \begin{frame}{Conclusioni}
+        \textbf{Stato del progetto}
+        \begin{itemize}
+            \item Algoritmo completato
+        \end{itemize}
+        \textbf{Prospettive future}
+        \begin{itemize}
+            \item Miglioramento dell'interprete ed espansione della grammatica supportata
+            \item Ottimizzazione del calcolo stesso
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Conclusioni}
+        \textbf{Grazie per l'attenzione.}
+    \end{frame}
+
+\end{darkframes}
+
+\end{document}
