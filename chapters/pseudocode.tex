@@ -22,7 +22,7 @@ Le funzioni di utilità utilizzate sono:
 \subsection{atoms}
 Qui verrà presentato lo pseudocodice per la funzione \textit{atoms}, incaricata di estrapolare ricorsivamente tutte le possibili variabili proposizionali da una lista di formule. \\
 Esempio: \\
-\textbf{Input:} [($A \Rightarrow B$), ($C \lor B$), ($D \lor A \land C$)] \\
+\textbf{Input:} [($A \supset B$), ($C \lor B$), ($D \lor A \land C$)] \\
 \textbf{Risultato:} $\{A, B, C, D\}$
 
 \begin{algorithm}
@@ -45,10 +45,10 @@ Esempio: \\
 \end{algorithm}
 
 \subsection{imps}
-Qui verrà presentato lo pseudocodice per la funzione \textit{imps}, incaricata di estrapolare ricorsivamente tutte le possibili formula dalla forma $A \Rightarrow B$ da una lista di formule. \\
+Qui verrà presentato lo pseudocodice per la funzione \textit{imps}, incaricata di estrapolare ricorsivamente tutte le possibili formula dalla forma $A \supset B$ da una lista di formule. \\
 Esempio: \\
-\textbf{Input:} [($A \Rightarrow B$), ($C \lor B$), ($D \lor A \land C$), ($\neg A$)] \\
-\textbf{Risultato:} $\{(A \Rightarrow B), (\neg A)\}$
+\textbf{Input:} [($A \supset B$), ($C \lor B$), ($D \lor A \land C$), ($\neg A$)] \\
+\textbf{Risultato:} $\{(A \supset B), (\neg A)\}$
 
 \begin{algorithm}
     \caption{Pseudocodice per la funzione \textbf{imps}}\label{alg:imps}
@@ -110,7 +110,7 @@ Il calcolo di refutazione è composto da 3 funzioni principali:
 \subsection{generateAxioms}
 Qui verrà presentato lo pseudocodice per la funzione \textit{generateAxioms}, incaricata di creare tutti gli assiomi possibili che avranno la forma di sequenti. \\
 Esempio: \\
-\textbf{Input:} [($A \Rightarrow B$), ($C \lor B$), ($D \lor A \land C$), ($\neg A$)] \\
+\textbf{Input:} [($A \supset B$), ($C \lor B$), ($D \lor A \land C$), ($\neg A$)] \\
 \textbf{Risultato:} [($\{\}, \emptyset, \{A, B, C, \bot\}$), [$(\{A\}, \emptyset, \{B, C, \bot\})$], [$(\{A, B\}, \emptyset, \{C, \bot\})$], [$(\{A, B, C\}, \emptyset, \{\bot\})$]]
 
 \begin{algorithm}
@@ -163,9 +163,9 @@ Qui verrà presentato lo pseudocodice per la funzione \textit{execute}, che rapp
     \begin{algorithmic}
         \Function{proof}{$G, \Gamma, \Lambda, \Delta, sl, sf, k, history$}
         \While{($G \notin Cl^{-}(\Delta \cup \Lambda)) \lor (sl \land sr \neq \emptyset)$}
-        \State $leftItems \gets $ elementi in sl che rispettano $L\Rightarrow$
-        \State $rightItems \gets $ elementi in sr che rispettano $R\Rightarrow$
-        \If{$leftItems \land rightItems = \emptyset$}
+        \State $leftItems \gets $ elementi in sl che rispettano $L\supset$
+        \State $rightItems \gets $ elementi in sr che rispettano $R\supset$
+        \If{$leftItems \cup rightItems = \emptyset$}
         \State $\Lambda^{'} = \Gamma^{at} \cap \Delta^{at}$
         \If{$\Lambda^{'} = \Lambda$}
         \State \textbf{return} null
@@ -222,9 +222,9 @@ Qui verrà presentato lo pseudocodice per la funzione \textit{printResult}, che 
         \If{$Rule = Ax$}
         \State printf "$K = k, Ax$"
         \ElsIf{$Rule = Left$}
-        \State printf "$K = k, L\Rightarrow$"
+        \State printf "$K = k, L\supset$"
         \ElsIf{$Rule = Right$}
-        \State printf "$K = k, R\Rightarrow$"
+        \State printf "$K = k, R\supset$"
         \ElsIf{$Rule = Succ$}
         \State printf "$K = k, Succ$"
         \EndIf

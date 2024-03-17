@@ -29,11 +29,11 @@ E' necessario supportare l'interpretazione ed il riconoscimento dei caratteri ch
 In questo caso:
 \begin{itemize}
     \item \textbf{Parentesi:} tonde, quadre e graffe
-    \item \textbf{Lettere (formule atomiche):} A, b, C, D, E, f, g, ...
-    \item \textbf{Operatori logici:} And, Or, Not, Imp
-    \item \textbf{Contraddizioni:} Falso
+    \item \textbf{Lettere (formule atomiche):} $A$, $b$, $C$, $D$, $E$, $f$, $g$, ...
+    \item \textbf{Operatori logici:} And($\land$), Or($\lor$), Not($\not$), Imp($\supset$)
+    \item \textbf{Contraddizioni:} Falso($\bot$)
 \end{itemize}
-Gli operatori logici devono essere supportati nelle loro diverse forme di rappresentazione (\(\land\), and, ||, |, or, \(\lor\), ecc).
+Gli operatori logici devono essere supportati nelle loro diverse forme di rappresentazione ($\land$, and, ||, |, or, $\lor$, ecc).
 Ogni formula correttamente interpretata deve essere trasformata nella sua rappresentazione interna, ossia un grafo che viene rappresentato tramite un \textit{type}. \\
 
 \section{Lettura}
@@ -67,7 +67,7 @@ La ricerca della prova finisce quando:
 \end{itemize}
 I passaggi che l'algoritmo esegue sono:
 \begin{itemize}
-    \item Generazione delle sotto-formule dell'obiettivo
+    \item Generazione delle sottoformule dell'obiettivo
     \item Definizione degli insiemi \textit{Gamma, Delta e Lambda}. Dato un passaggio k, i tre insiemi rappresentano il \textit{sequente k}.
     \item Generazione degli assiomi (situazione di partenza)
     \item Esecuzione di un ciclo dove vengono applicate tutte le regole collezionate nei passaggi precedenti

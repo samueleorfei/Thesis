@@ -66,7 +66,7 @@
 
         \textbf{Requisiti sui tipi}
         \begin{itemize}
-            \item Supporto degli operatori logici $\land$, $\lor$, $\Rightarrow$, $\not$
+            \item Supporto degli operatori logici $\land$, $\lor$, $\supset$, $\not$
             \item Supporto di proposizioni atomiche e di costanti come $\bot$
             \item Supporto di formule innestate mediante interpretazione dei caratteri parentesi: tonda, quadra e graffa
             \item Supporto della lettura della formula sia sotto forma di stringa che di rappresentazione interna (tipo \textit{Formula})
@@ -89,7 +89,7 @@
     \begin{frame}{Definizioni formali}
         \framesubtitle{Definizioni}
         \begin{itemize}
-            \item Sotto-formula sinistra o destra
+            \item sottoformula sinistra o destra
             \item Chiusura positiva o negativa
             \item Sequente: Tripla di 3 insiemi ($\Lambda, \Gamma, \Delta$)
             \item Calcolo RGD: Precedimento ricorsivo di applicazione delle regole ai sequenti ed espansione del contro-modello
@@ -97,8 +97,8 @@
 
         \framesubtitle{Regole algoritmo}
         \begin{itemize}
-            \item Regola sinistra L->: Inserimento della sotto-formula nell'insieme sinistro del sequente
-            \item Regola destra R->: Inserimento della sotto-formula nell'insieme destro del sequente
+            \item Regola sinistra L->: Inserimento della sottoformula nell'insieme sinistro del sequente
+            \item Regola destra R->: Inserimento della sottoformula nell'insieme destro del sequente
             \item Regola successore: Cambio di radice
             \item Condizioni di termininazione: Elementi finiti o sequenti saturi
         \end{itemize}
