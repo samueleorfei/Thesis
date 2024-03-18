@@ -1,4 +1,5 @@
 \documentclass{oist}
+\addbibresource{bibtex.bib}
 \begin{document}
 
 \pagestyle{empty}
@@ -29,26 +30,70 @@
 
 \section*{Riassunto}
 
-L'elaborato si occupa di descrivere, sia tramite definizione formale (matematica), che tramite definizione pratica mediante l'uso di un linguaggio di programmazione funzionale, un calcolo di refutazione per dimostrare la non-provabilità di una formula. Dalle refutazione sarà poi possibile estrapolare dei contro-modelli per le formule non provabili. \\
-Lo scopo è quello di ottenere una implementazione del calcolo di refutazione mediante il linguaggio F\# per poter avere uno strumento utilizzabile per la costruzione di contromodelli. \\
-Viene fatto particolare riferimento alla famiglia di logiche chiamate di G\"odel-Dummett, in quanto, essendo caratterizzata da modelli lineari, è stata studiata a lungo per le sue relazioni con la logica fuzzy e per la sua capacità computazionale. \\
-La prima sezione dell'elaborato si occupa di dare una definizione formale (matematica) del calcolo, di ogni suo passaggio e delle sue regole. Ci sono inoltre le definizioni formali di alcuni strumenti matematici utilizzati in alcuni passaggi del calcolo come le chiusure e le sotto-formule.
+Le logiche di G\"odel-Dummett sono una famiglia infinita di logiche
+intermedie proposizionali che estendono la logica intuizionista
+proposizionale
+e sono contenute nella logica classica proposizionale.
+Dal punto di vista semantico, la logica di  G\"odel-Dummett di lunghezza
+$k$,
+che chiamiamo $\mathrm{GD}_k$,
+\`e la logica caratterizzata dalla classe dei  modelli di Kripke lineari
+di profondit\`a
+al massimo $k$; la logica di  G\"odel-Dummett,  che chiamiamo $\mathrm{GD}$,
+\`e caratterizzata dalla classe di tutti i  modelli di  Kripke lineari.
+Si noti che $\mathrm{GD}_0\subset\mathrm{GD}_1
+    \subset\mathrm{GD}_2\subset\dots\subset \mathrm{GD}$.
+Questa famiglia di logiche \`e stata ampiamente studiata in letteratura
+per le relazioni con le logiche
+fuzzy \cite{Hajek:98} e perch\'e ammettono una particolare semantica computazionale
+\cite{AscCiaGen:2017,Avron:91b}.
+Sono noti vari calcoli e strategie di ricerche di prove per queste logiche.
+
+In questo elaborato si presenta la implementazione in F\# del calcolo di
+refutazione
+presentato in \cite{cilc:2022}.
+Pi\`u in dettaglio,
+si tratta di un calcolo modulare in grado di dimostrare
+la non-validit\`a di una formula in ciascuna delle logiche di
+G\"odel-Dummett.
+Data una logica $L$ e una formula $A$, se si costruisca una derivazione
+di $A$ nel calcolo per $L$,
+ne deriva che la formula $A$ non \`e valida nella logica $L$;
+inoltre, dalla derivazione \`e possibile ottenere un contromodello per
+$A$, ossia un modello
+della logica $L$ in cui la formula $A$ \`e falsificata.
+La particolarit\`a del calcolo \`e che supporta una strategia di ricerca
+forward: prima vengono
+generati tutti gli assiomi che possono contribuire alla costruzione
+della derivazione;
+successivamente, partendo dall'insieme degli assiomi, si applicano le
+regole del calcolo, in tutti i modi possibili.
+
+La procedura di ricerca termina quando si ottiene una derivazione  della
+formula $A$ oppure tutte le possibili derivazioni  sono state costruite
+e nessuna di queste \`e una derivazione di $A$; la terminazione \`e
+garantita
+dal fatto che sia  l'insieme iniziale degli assiomi che l'insieme delle
+possibili applicazioni di regole sono finite.
+Se la ricerca di una derivazione per $A$ fallisce,
+si pu\`o concludere che la formula $A$ \`e valida nella logica $L$.
+La prima sezione dell'elaborato si occupa di dare una definizione formale (matematica) del calcolo, di ogni suo passaggio e delle sue regole. Ci sono inoltre le definizioni formali di alcuni strumenti matematici utilizzati in alcuni passaggi del calcolo come le chiusure e le sottoformule.
 
 Successivamente c'è una sezione dedicata allo pseudocodice delle principali funzioni implementate. Sono state selezionate le funzioni più significative e, nonostante l'implementazione sia in linguaggio F\# funzionale, ne è stata data la definizione mediante pseudocodice basato sul paradigma di programmazione procedurale (C-like). \\
 Per ogni pseudocodice è stata fornita una breve spiegazione e le funzioni sono state divise a seconda dello scopo. Inoltre, per le funzioni di utilità più generiche, è stato fornito anche un esempio di input ed output.
 
 La terza sezione contiene una descrizione riguardante il come è stata organizzata la soluzione e quali strumenti sono stati utilizzati per lo sviluppo. Il codice è stato scritto con la modularità in mente per poter, eventualmente, riutilizzare parti di codice anche al di fuori del progetto. Gli strumenti utilizzati sono:
 \begin{itemize}
-    \item \textbf{Github:} Per il versionamento del codice
-    \item \textbf{.NET:} Come framework di sviluppo che fornisce sia il linguaggio F\# che le librerie contenti le strutture dati di base
-    \item \textbf{Visual Studio Code:} Come IDE di sviluppo
+    \item \textbf{Github:} Per il versionamento del codice. 
+    \item \textbf{.NET:} Come framework di sviluppo che fornisce sia il linguaggio F\# che le librerie contenti le strutture dati di base.
+    \item \textbf{Visual Studio Code:} Come IDE di sviluppo. 
 \end{itemize}
 
 La quarta sezione contiene la descrizione dei vari moduli implementati con le relative funzioni e/o tipi. \\
 Particolare attenzione è stata posta al tipo \textit{Formula} in quanto rappresenta il punto centrale di tutto il progetto. Tramite la \textit{Formula} è possibile rappresentare, sotto forma di albero, tutte le formule logiche e relativi operatori. \\
 Quanto ai moduli invece, particolarmente importanti sono i moduli \textit{Expression} e \textit{Calculus} che contengono rispettivamente:
 \begin{itemize}
-    \item Le funzioni per l'estrapolazione di sotto-formule o controllo di appartenenza a chiusure positive o negative
+    \item Le funzioni per l'estrapolazione di sottoformule o controllo di appartenenza a chiusure positive o negative
     \item Le funzioni per l'implementazione dell'algoritmo vero e proprio
 \end{itemize}
 Il flusso completo dell'algoritmo comprende:
@@ -61,5 +106,8 @@ Il flusso completo dell'algoritmo comprende:
 
 La quinta sezione contiene la conclusione e la bibliografia. \\
 La ricerca bibliografica ha riguardato principalmente i siti internet delle case madri dei software elencati sopra (.NET, Github, F\#) ed una pubblicazione su \textit{AIR} (Archivio Istituzionale della Ricerca) intitolato \textit{Forward refutation for G\"odel-Dummett Logics}. \\
+
+\printbibliography
+\addcontentsline{toc}{part}{Bibliografia}
 
 \end{document}
