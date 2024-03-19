@@ -34,13 +34,13 @@ Le logiche di G\"odel-Dummett sono una famiglia infinita di logiche
 intermedie proposizionali che estendono la logica intuizionista
 proposizionale
 e sono contenute nella logica classica proposizionale.
-Dal punto di vista semantico, la logica di  G\"odel-Dummett di lunghezza
+Dal punto di vista semantico, la logica di  G\"odel-Dummett di profondit\`a
 $k$,
 che chiamiamo $\mathrm{GD}_k$,
-\`e la logica caratterizzata dalla classe dei  modelli di Kripke lineari
+\`e la logica caratterizzata dalla classe dei modelli di Kripke lineari
 di profondit\`a
 al massimo $k$; la logica di  G\"odel-Dummett,  che chiamiamo $\mathrm{GD}$,
-\`e caratterizzata dalla classe di tutti i  modelli di  Kripke lineari.
+\`e caratterizzata dalla classe di tutti i  modelli di Kripke lineari e finiti.
 Si noti che $\mathrm{GD}_0\subset\mathrm{GD}_1
     \subset\mathrm{GD}_2\subset\dots\subset \mathrm{GD}$.
 Questa famiglia di logiche \`e stata ampiamente studiata in letteratura
@@ -69,43 +69,48 @@ della derivazione;
 successivamente, partendo dall'insieme degli assiomi, si applicano le
 regole del calcolo, in tutti i modi possibili.
 
-La procedura di ricerca termina quando si ottiene una derivazione  della
-formula $A$ oppure tutte le possibili derivazioni  sono state costruite
+La procedura di ricerca termina quando si ottiene una derivazione della
+formula $A$ oppure tutte le possibili derivazioni sono state costruite
 e nessuna di queste \`e una derivazione di $A$; la terminazione \`e
 garantita
-dal fatto che sia  l'insieme iniziale degli assiomi che l'insieme delle
-possibili applicazioni di regole sono finite.
+dal fatto che sia l'insieme iniziale degli assiomi che l'insieme delle
+possibili applicazioni di regole sono finiti.
 Se la ricerca di una derivazione per $A$ fallisce,
 si pu\`o concludere che la formula $A$ \`e valida nella logica $L$.
-La prima sezione dell'elaborato si occupa di dare una definizione formale (matematica) del calcolo, di ogni suo passaggio e delle sue regole. Ci sono inoltre le definizioni formali di alcuni strumenti matematici utilizzati in alcuni passaggi del calcolo come le chiusure e le sottoformule.
 
-Successivamente c'è una sezione dedicata allo pseudocodice delle principali funzioni implementate. Sono state selezionate le funzioni più significative e, nonostante l'implementazione sia in linguaggio F\# funzionale, ne è stata data la definizione mediante pseudocodice basato sul paradigma di programmazione procedurale (C-like). \\
+Il primo capitolo dell'elaborato \`e dedicato alla introduzione degli strumenti matematici
+necessari per descrivere in modo formale le logiche di G\"odel-Dummett, i calcoli di refutazione
+e la strategia di ricerca di derivazioni.
+
+Il secondo capitolo è dedicato allo pseudocodice delle principali funzioni implementate. Sono state selezionate le funzioni più significative e, nonostante l'implementazione sia in linguaggio F\# funzionale, ne è stata data la definizione mediante pseudocodice basato sul paradigma di programmazione procedurale (C-like). \\
 Per ogni pseudocodice è stata fornita una breve spiegazione e le funzioni sono state divise a seconda dello scopo. Inoltre, per le funzioni di utilità più generiche, è stato fornito anche un esempio di input ed output.
 
-La terza sezione contiene una descrizione riguardante il come è stata organizzata la soluzione e quali strumenti sono stati utilizzati per lo sviluppo. Il codice è stato scritto con la modularità in mente per poter, eventualmente, riutilizzare parti di codice anche al di fuori del progetto. Gli strumenti utilizzati sono:
+Il terzo capitolo descrive l'implementazione del calcolo e della strategia di ricerca, inoltre
+vengono presentatati  gli strumenti utilizzati per lo sviluppo del codice.
+Il codice \`e stato scritto con un approccio modulare in modo da permettere il riutilizzo di alcune delle sue parti in altri contesti.
+Gli strumenti utilizzati sono:
 \begin{itemize}
-    \item \textbf{Github:} Per il versionamento del codice. 
-    \item \textbf{.NET:} Come framework di sviluppo che fornisce sia il linguaggio F\# che le librerie contenti le strutture dati di base.
-    \item \textbf{Visual Studio Code:} Come IDE di sviluppo. 
+    \item \textbf{Github:} Per il versionamento del codice \cite{github}.
+    \item \textbf{.NET:} Come framework di sviluppo che fornisce sia il linguaggio F\# \cite{fsharp} che le librerie contenti le strutture dati di base \cite{dotnet}.
+    \item \textbf{Visual Studio Code:} Come IDE di sviluppo \cite{vscode}.
 \end{itemize}
 
-La quarta sezione contiene la descrizione dei vari moduli implementati con le relative funzioni e/o tipi. \\
+Il quarto capitolo contiene la descrizione dei vari moduli implementati con le relative funzioni e/o tipi. \\
 Particolare attenzione è stata posta al tipo \textit{Formula} in quanto rappresenta il punto centrale di tutto il progetto. Tramite la \textit{Formula} è possibile rappresentare, sotto forma di albero, tutte le formule logiche e relativi operatori. \\
 Quanto ai moduli invece, particolarmente importanti sono i moduli \textit{Expression} e \textit{Calculus} che contengono rispettivamente:
 \begin{itemize}
-    \item Le funzioni per l'estrapolazione di sottoformule o controllo di appartenenza a chiusure positive o negative
-    \item Le funzioni per l'implementazione dell'algoritmo vero e proprio
+    \item Le funzioni per l'estrapolazione di sottoformule o controllo di appartenenza a chiusure positive o negative.
+    \item Le funzioni per l'implementazione dell'algoritmo vero e proprio.
 \end{itemize}
 Il flusso completo dell'algoritmo comprende:
 \begin{itemize}
-    \item Lettura della formula sotto forma di stringa da file di testo o da linea di comando
-    \item Interpretazione della formula mediante un \textit{Interprete} composto da due moduli specifici: \textit{Lexer} per la costruzione dei \textit{Token} dal testo usando una grammatica specifica, \textit{Parser} che utilizza i \textit{Token} per costruire la rappresentazione interna della formula utilizzando il tipo \textit{Formula}
-    \item Esecuzione dell'algoritmo vero e proprio, applicato sul risultato del \textit{Parser}
-    \item Restituzione dei risultati e stampa sulla linea di comando di questi ultimi
+    \item Lettura della formula sotto forma di stringa da file di testo o da linea di comando.
+    \item Interpretazione della formula mediante un \textit{Interprete} composto da due moduli specifici: \textit{Lexer} per la costruzione dei \textit{Token} dal testo usando una grammatica specifica, \textit{Parser} che utilizza i \textit{Token} per costruire la rappresentazione interna della formula utilizzando il tipo \textit{Formula}.
+    \item Esecuzione dell'algoritmo vero e proprio, applicato sul risultato del \textit{Parser}.
+    \item Restituzione dei risultati e stampa sulla linea di comando di questi ultimi.
 \end{itemize}
 
-La quinta sezione contiene la conclusione e la bibliografia. \\
-La ricerca bibliografica ha riguardato principalmente i siti internet delle case madri dei software elencati sopra (.NET, Github, F\#) ed una pubblicazione su \textit{AIR} (Archivio Istituzionale della Ricerca) intitolato \textit{Forward refutation for G\"odel-Dummett Logics}. \\
+Il quinto capitolo contiene la conclusione e la bibliografia. \\
 
 \printbibliography
 \addcontentsline{toc}{part}{Bibliografia}
