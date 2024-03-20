@@ -4,18 +4,58 @@
 \chapter{Introduzione}
 \addcontentsline{toc}{chapter}{Introduzione}
 
-Con il termine \textit{logiche di G\"odel-Dummett} si fa riferimento ad una famiglia di logiche dette \textit{intermedie} (intermedie tra la logica intuizionista e la logica classica),\\
-caratterizzata dai modelli lineari (di qualunque profondità). \\
-Per ogni $k \geq 0$, la logica di G\"odel-Dummett di profondità k è caratterizzata dai modelli lineari di profondità al massimo k. \\
-Le logiche di G\"odel-Dummett sono state studiate a lungo per via delle loro relazioni con le \textit{logiche fuzzy} e per le loro interpretazioni computazionali, \\
-che hanno portato allo sviluppo di intere famiglie di algoritmi e strategie dimostrative. \\
+Le logiche di G\"odel-Dummett sono una famiglia infinita di logiche
+intermedie proposizionali che estendono la logica intuizionista
+proposizionale
+e sono contenute nella logica classica proposizionale.
+Dal punto di vista semantico, la logica di  G\"odel-Dummett di profondit\`a
+$k$,
+che chiamiamo $\mathrm{GD}_k$,
+\`e la logica caratterizzata dalla classe dei modelli di Kripke lineari
+di profondit\`a
+al massimo $k$; la logica di  G\"odel-Dummett,  che chiamiamo $\mathrm{GD}$,
+\`e caratterizzata dalla classe di tutti i  modelli di Kripke lineari e finiti.
+Si noti che $\mathrm{GD}_0\subset\mathrm{GD}_1
+  \subset\mathrm{GD}_2\subset\dots\subset \mathrm{GD}$.
+Questa famiglia di logiche \`e stata ampiamente studiata in letteratura
+per le relazioni con le logiche
+fuzzy \cite{Hajek:98} e perch\'e ammettono una particolare semantica computazionale
+\cite{AscCiaGen:2017,Avron:91b}.
+Sono noti vari calcoli e strategie di ricerche di prove per queste logiche \cite{Aschieri:2016,Avron:91b,BecPre:2018,FioFer:2020,Fiorino:2014,LarcheyWendling:2005}.
+
 In questo caso, andremo a definire un algoritmo, e la sua implementazione, che ha come obiettivo quello di definire un calcolo logico per la generazioni di contro-modelli per le formule non valide nella logica di G\"odel-Dummett.\\
+Pi\`u in dettaglio,
+si tratta di un calcolo modulare in grado di dimostrare
+la non-validit\`a di una formula in ciascuna delle logiche di
+G\"odel-Dummett.
+Data una logica $L$ e una formula $A$, se si costruisca una derivazione
+di $A$ nel calcolo per $L$,
+ne deriva che la formula $A$ non \`e valida nella logica $L$;
+inoltre, dalla derivazione \`e possibile ottenere un contromodello per
+$A$, ossia un modello
+della logica $L$ in cui la formula $A$ \`e falsificata.
+La particolarit\`a del calcolo \`e che supporta una strategia di ricerca
+forward: prima vengono
+generati tutti gli assiomi che possono contribuire alla costruzione
+della derivazione;
+successivamente, partendo dall'insieme degli assiomi, si applicano le
+regole del calcolo, in tutti i modi possibili.
+
+La procedura di ricerca termina quando si ottiene una derivazione della
+formula $A$ oppure tutte le possibili derivazioni sono state costruite
+e nessuna di queste \`e una derivazione di $A$; la terminazione \`e
+garantita
+dal fatto che sia l'insieme iniziale degli assiomi che l'insieme delle
+possibili applicazioni di regole sono finiti.
+Se la ricerca di una derivazione per $A$ fallisce,
+si pu\`o concludere che la formula $A$ \`e valida nella logica $L$.
+
 L'algoritmo dovrà:
 \begin{itemize}
-    \item Leggere da file di testo la formula che rappresenta l'obiettivo
-    \item Interpretarla e creare la rappresentazione interna della formula
-    \item Eseguire i passaggi richiesti dal calcolo di refutazione
-    \item Restituire i sequenti utilizzati per contruire il contro-modello
+  \item Leggere da file di testo la formula che rappresenta l'obiettivo
+  \item Interpretarla e creare la rappresentazione interna della formula
+  \item Eseguire i passaggi richiesti dal calcolo di refutazione
+  \item Restituire i sequenti utilizzati per contruire il contro-modello
 \end{itemize}
 L'algoritmo che si intende implementare dovrà seguire delle determinate regole che dipendendono dal dominio di appartenenza (logiche di \textit{G\"odel-Dummett}), oltre a dei generali principi di progettazione ed implementazione del codice.
 
@@ -28,10 +68,10 @@ Si tratta di una applicazione console inizialmente vuota, che legge i suoi input
 E' necessario supportare l'interpretazione ed il riconoscimento dei caratteri che rappresentano lettere, parentesi e simboli logici comunemente usati nelle espressioni logiche. \\
 In questo caso:
 \begin{itemize}
-    \item \textbf{Parentesi:} tonde, quadre e graffe
-    \item \textbf{Lettere (formule atomiche):} $A$, $b$, $C$, $D$, $E$, $f$, $g$, ...
-    \item \textbf{Operatori logici:} And($\land$), Or($\lor$), Not($\not$), Imp($\supset$)
-    \item \textbf{Contraddizioni:} Falso($\bot$)
+  \item \textbf{Parentesi:} tonde, quadre e graffe
+  \item \textbf{Lettere (formule atomiche):} $A$, $b$, $C$, $D$, $E$, $f$, $g$, ...
+  \item \textbf{Operatori logici:} And($\land$), Or($\lor$), Not($\not$), Imp($\supset$)
+  \item \textbf{Contraddizioni:} Falso($\bot$)
 \end{itemize}
 Gli operatori logici devono essere supportati nelle loro diverse forme di rappresentazione ($\land$, and, ||, |, or, $\lor$, ecc).
 Ogni formula correttamente interpretata deve essere trasformata nella sua rappresentazione interna, ossia un grafo che viene rappresentato tramite un \textit{type}. \\
@@ -40,8 +80,8 @@ Ogni formula correttamente interpretata deve essere trasformata nella sua rappre
 La definizione della formula di partenza da dare in input all'algoritmo, ossia l'obiettivo (goal), è stato scelto di inserirla in un file di testo (.txt). \\
 Questa decisione è stata presa per principalmente 2 motivi:
 \begin{itemize}
-    \item \textbf{Centralizzazione:} Tutte le formule verranno scritte all'interno di quel file di testo, evitando la dispersione dovuta alla definizione delle formule in multipli file.
-    \item \textbf{Semplicità di definizione:} Utilizzando il file di testo, le formule si possono definire utilizzando il linguaggio naturale (ES. A and B) evitando quindi di ricorrere all'utilizzo della rappresentazione interna che sarebbe, invece, più astratta.
+  \item \textbf{Centralizzazione:} Tutte le formule verranno scritte all'interno di quel file di testo, evitando la dispersione dovuta alla definizione delle formule in multipli file.
+  \item \textbf{Semplicità di definizione:} Utilizzando il file di testo, le formule si possono definire utilizzando il linguaggio naturale (ES. A and B) evitando quindi di ricorrere all'utilizzo della rappresentazione interna che sarebbe, invece, più astratta.
 \end{itemize}
 Questa soluzione ha ovviamente imposto la definizione di alcune funzioni atte alla lettura di testo da file.
 Il nome del file di testo è stato scelto per essere auto-esplicativo, infatti è stato chiamato \textit{Goal.txt}. \\
@@ -51,8 +91,8 @@ La lettura della formula da file di testo comporta l'ottenimento della stringa r
 Dalla stringa però bisogna passare alla rappresentazione interna (astrazione) per poterla poi utilizzare per il calcolo di refutazione. A tal proposito è stato definito un interprete di espressioni logiche (Lexer + Parser) che, data una stringa rappresentante una formula, restituisce la sua rappresentazione interna. \\
 Le due componente dell' interprete sono:
 \begin{itemize}
-    \item \textbf{Lexer:} Il Lexer è quel componente dell'interprete che utilizzando una grammatica definita (insieme di simboli che rappresentano caratteri o insiemi di caratteri specifici a cui viene assegnato un significato), trasforma una stringa in una lista di \textit{Token}. Un Token è una via di mezzo tra la rappresentazione interna e la rappresentazione ad alto livello ed è rappresentato come una tupla tra il carattere letto, e la sua tipologia di appartenenza definita dalla grammatica.
-    \item \textbf{Parser:} Il Parser è quel componente dell'interprete che, ricevendo in input la lista di \textit{Token} creata dal Lexer, la utilizza per creare la rappresentazione interna della stringa (in questo caso, una espressione logica).
+  \item \textbf{Lexer:} Il Lexer è quel componente dell'interprete che utilizzando una grammatica definita (insieme di simboli che rappresentano caratteri o insiemi di caratteri specifici a cui viene assegnato un significato), trasforma una stringa in una lista di \textit{Token}. Un Token è una via di mezzo tra la rappresentazione interna e la rappresentazione ad alto livello ed è rappresentato come una tupla tra il carattere letto, e la sua tipologia di appartenenza definita dalla grammatica.
+  \item \textbf{Parser:} Il Parser è quel componente dell'interprete che, ricevendo in input la lista di \textit{Token} creata dal Lexer, la utilizza per creare la rappresentazione interna della stringa (in questo caso, una espressione logica).
 \end{itemize}
 Questo passaggio è reso obbligatorio dalla scelta di utilizzare i file di testo (ed in generale, le stringhe) per definire le formule.
 Essendo il processo di interpretazione complesso e con possibilità di errori, è stato presdisposto un sistema di \textit{Logging} per fornire le informazioni, in caso di errore, del tipo di errore e del perchè si è verificato. \\
@@ -62,15 +102,15 @@ Dopo aver ottenuto la rappresentazione interna della formula \textit{obiettivo},
 L'algoritmo è basato sul metodo inverso, introdotto da Maslov. E' una tecnica dimostrativa che si basa sulla saturazione dove, data una formula obiettivo, vengono definite una serie di regole, che vengono poi applicate sequenzialmente. \\
 La ricerca della prova finisce quando:
 \begin{itemize}
-    \item L'obiettivo è stato ottenuto
-    \item L'insieme contenente le premesse dimostrate è saturo (non può essere aggiunto niente di nuovo)
+  \item L'obiettivo è stato ottenuto
+  \item L'insieme contenente le premesse dimostrate è saturo (non può essere aggiunto niente di nuovo)
 \end{itemize}
 I passaggi che l'algoritmo esegue sono:
 \begin{itemize}
-    \item Generazione delle sottoformule dell'obiettivo
-    \item Definizione degli insiemi \textit{Gamma, Delta e Lambda}. Dato un passaggio k, i tre insiemi rappresentano il \textit{sequente k}.
-    \item Generazione degli assiomi (situazione di partenza)
-    \item Esecuzione di un ciclo dove vengono applicate tutte le regole collezionate nei passaggi precedenti
+  \item Generazione delle sottoformule dell'obiettivo
+  \item Definizione degli insiemi \textit{Gamma, Delta e Lambda}. Dato un passaggio k, i tre insiemi rappresentano il \textit{sequente k}.
+  \item Generazione degli assiomi (situazione di partenza)
+  \item Esecuzione di un ciclo dove vengono applicate tutte le regole collezionate nei passaggi precedenti
 \end{itemize}
 
 \section{Requisiti aggiuntivi}
@@ -79,11 +119,11 @@ I passaggi che l'algoritmo esegue sono:
 \label{documentation}
 La documentazione è rappresentata dall'insieme dei commenti in stile \textit{XML doc} \cite{xml} che forniscono informazioni riguardanti:
 \begin{itemize}
-    \item Descrizione del modulo e della funzione
-    \item Effetti collaterali
-    \item Tipi di ritorno e tipi dei parametri
-    \item Pre-condizioni
-    \item Post-condizioni
+  \item Descrizione del modulo e della funzione
+  \item Effetti collaterali
+  \item Tipi di ritorno e tipi dei parametri
+  \item Pre-condizioni
+  \item Post-condizioni
 \end{itemize}
 Inoltre, è predisposto un file in formato \textit{Markdown} \cite{markdown}, che descrive i passaggi da eseguire per installare il progetto sulla propria macchina, per eseguirlo, gli strumenti che è necessario installare ed in generale, le azioni che è necessario eseguire. \\
 Contiene inoltre una descrizione del progetto ed una descrizione di ogni sua singola parte. \\
