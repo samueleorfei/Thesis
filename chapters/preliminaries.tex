@@ -119,4 +119,211 @@ Le condizioni per la terminazione sono due:
     \item Quando si ottiene un sequente che rispetta la seguente regola: $G \in Cl^{-}(\Delta \cup \Lambda)$
 \end{itemize}
 
+\newpage
+
+Di seguito verranno mostrate le formalizzazioni delle regole del calcolo spiegate sopra.
+
+\begin{figure}[h]
+    \[
+        \begin{array}{c}
+            %% AXIOM
+            \AXC{}
+            \RightLabel{$\mathrm{Ax}$}
+            \UIC{$\seqfrd{0}{\Gat}{}{\Dat,\bot}$}
+            \DP
+            \qquad
+            \begin{minipage}{15em}
+                $\Gat\cup\Dat\,=\,\Sfat{G}$
+                \\[1ex]
+                $\Gat\cap\Dat=\emptyset$
+            \end{minipage}
+            \\[9ex]
+            %%% L IMP  0   
+            \AXC{$\seqfrd{0}{\G}{}{\D}$}
+            \RightLabel{$L\imp$}
+            \UIC{$\seqfrd{0}{A\imp B,\G}{}{\D}$}
+            \DP
+            \quad
+            \begin{minipage}{7em}
+                $A\imp B\not\in\G\cup\D$
+                \\[1ex]
+                $A\in\Clom{\D}$
+            \end{minipage}
+            \hspace{1em}
+            %%% L IMP  1
+            \AXC{$\seqfrd{k}{\G}{\Lambda}{\D}$}
+            \RightLabel{$L\imp$}
+            \UIC{$\seqfrd{k}{A\imp B,\G}{\Lambda}{\D}$}
+            \DP
+            \quad
+            \begin{minipage}{10em}
+                $A\imp B\not\in\G\cup\D$
+                \\[1ex]
+                $A\in\Clom{\D\cup\Lambda}$
+                \\[1ex]
+                $B\in\Clop{\G\cup\Lambda}$
+            \end{minipage}
+            \\[9ex]
+            %%% R IMP  
+            \AXC{$\seqfrd{k}{\G}{\Lambda} {\D}$}
+            \RightLabel{$R\imp$}
+            \UIC{$\seqfrd{k}{\G}{\Lambda}{\D,A\imp B}$}
+            \DP
+            \quad
+            \begin{minipage}{8em}
+                $A\imp B\not\in\Delta\cup\D$
+                \\[1ex]
+                $A\in\Clop{\G}$
+                \\[1ex]
+                $B\in\Clom{\D\cup\Lambda}$
+            \end{minipage}
+            \hspace{2em}
+            \\[9ex]
+            %%% SUCC
+            \AXC{$\seqfrd{k}{\G}{\Lambda}{\D}$}
+            \RightLabel{$\mathrm{Succ}$}
+            \UIC{$\seqfrd{k+1}{\G\setminus\Lambda'}{\Lambda'}{\D,\Lambda}$}
+            \DP
+            \quad
+            \begin{minipage}{15em}
+                $\seqfrd{k}{\G}{\Lambda}{\D}$ is saturated
+                \\[1ex]
+                % $\Lambda' \subseteq\PV$           \\[1ex]
+                $\emptyset\subset \Lambda' \subseteq G \cap PV $
+            \end{minipage}
+        \end{array}
+    \]
+    \caption{Il calcolo di refutazione ${\bf RGD}(G)$.}
+    \label{fig:frdum}
+\end{figure}
+
+\begin{example}\label{ex:ex1}
+    Consideriamo la seguente formula $G$:
+    \[
+        \begin{array}{l}
+            G \;=\;
+            A\lor (p\imp r) \lor B \lor (C\imp (p\lor \neg p))
+            \\[1.5ex]
+            A\;=\,\neg(q\land r)
+            \qquad
+            B \;=\;(\neg \neg p \land (p\imp q))\imp q
+            \qquad
+            C\;=\;B\imp (\neg\neg p \land q)
+        \end{array}
+    \]
+    Cerchiamo una ${\bf RGD}(G)$-derivazione costruendo un database dei sequenti provati secondo le indicazioni
+    descritte in ~\cite{VoronkovHAR:01}: cominciamo con inserire tutti gli assiomi; poi entriamo in un ciclo dove, ad ogni iterazione,
+    applichiamo tutte le possibile regole ai sequenti collezionati nei passaggi precedenti. Il ciclo termine quanto un sequente del tipo $\seqfrd{k}{\Gamma}{\Lambda}{\D}$ con
+    $G\in\Clom{\D\cup\Lambda}$ viene generato, oppure quando nessun altro sequente pu\'o essere aggiunto al database (database saturo).
+    Fig.~\ref{fig:ex1} mostra il frammento di database contenente i sequenti necessari per ottenere la ${\bf RGD}(G)$-derivazione di $G$. Nell'esempio,
+    identifichiamo con $\s_{(j)}$ il sequente alla linea~$(j)$ della
+    Fig.~\ref{fig:ex1}. Nell'esempio, il sequente $\s_{\eqref{ex1:2}}$
+    viene ottenuto applicando la regola $R\imp$ al sequente
+    $\s_{\eqref{ex1:1}}$, cio\'e,:
+    \[
+        \AXC{$\seqfrd{0}{p,\:q,\:r}{}{\bot}$}
+        \RightLabel{$R\imp$}
+        \UIC{$\seqfrd{0}{p,\:q,\:r}{}{\bot,\:\neg p}$}
+        \DP
+    \]
+    ricordando che $\neg p=p\imp \bot$; notare che,
+    $p\in\Clop{\{p,\:q,\:r\}}$ e $\bot\in\Clom{\{\bot\}}$. Per quanto riguarda il sequente $\s_{\eqref{ex1:3}}$, viene ottenuto applicando la regola $L\imp$ a $\s_{\eqref{ex1:2}}$:
+    \[
+        \AXC{$\seqfrd{0}{p,\:q,\:r}{}{\bot,\:\neg p}$}
+        \RightLabel{$L\imp$}
+        \UIC{$\seqfrd{0}{p,\:q,\:r}{}{\bot,\:\neg p,\:A}$}
+        \DP
+    \]
+    dove $A=\neg(q\land r)=(q\land r)\imp \bot$ , notare che
+    $\bot\in\Clom{\{\bot\}}$ e $q\land r\in\Clop{\{p,\:q,\:r\}}$.
+    Il sequente $\s_{\eqref{ex1:5}}$ viene ottenuto applicando $\mathrm{Succ}$ a
+    $\s_{\eqref{ex1:4}}$ spostando $r$ da sinistra a destra; similmente,
+    $\s_{\eqref{ex1:7}}$ viene ottenuto applicando $\mathrm{Succ}$ a
+    $\s_{\eqref{ex1:6}}$ spostando $p$ e $q$ da sinistra a destra e
+    spostando $r$ nella zona pi\'u a destra. Abbiamo evidenziato con $*$ le premesse di $\mathrm{Succ}$ che contribuiranno alla costruzione del contromodello.
+    Notare che il sequente $\s_{\eqref{ex1:11}}$ rispetta la propriet\'a $G\in\Clom{\D\cup\Lambda}$.
+    \EndEs
+\end{example}
+
+\begin{figure}[t]
+    \centering
+    \[
+        \begin{array}{l}
+            G \;=\;
+            A\lor (p\imp r) \lor B \lor (C\imp (p\lor \neg p))
+            \\[1.5ex]
+            A\;=\,\neg(q\land r)
+            \qquad
+            B \;=\;(\neg \neg p \land (p\imp q))\imp q
+            \qquad
+            C\;=\;B\imp (\neg\neg p \land q)
+            \\[1.5ex]
+            SL^{At}{G}  \;=\;
+            \{\: p,\:q,\:r\:\}
+            \qquad
+            SL^{At}{G}  \;=\;
+            \{\:C,\: \neg \neg p,\: p\imp q\:\}
+            \\[1.5ex]
+            SR^{At}{G} \;=\;
+            \{\: p,\:q,\:r \:\}
+            \qquad
+            SR^{At}{G} \;=\;
+            \{\: A,\:p\imp r,\:B,\:C\imp(p\lor \neg p),\:\neg p\:\}
+        \end{array}
+    \]
+    \leqnomode % print counters in the left
+    \setcounter{equation}{0} % reset counter
+    % \allowdisplaybreaks % allow page break inside align
+    \begin{align}
+        \label{ex1:1}
+        \tseqfrd{0}{p,\:q,\:r}{}{\bot}
+                                                    &  & \mathrm{Ax}
+        \\[1ex]
+        \label{ex1:2}
+        \tseqfrd{0}{p,\:q,\:r}{}{\bot,\:\neg p}     &  & R\imp\; \eqref{ex1:1}
+        \\[1ex]
+        \label{ex1:3}
+        \tseqfrd{0}{p,\:q,\:r}{}{\bot,\:\neg p,\:A} &  & R\imp\; \eqref{ex1:2}
+        \\[1ex]
+        \label{ex1:4}
+        \tseqfrd{0}{\neg\neg p,\:p,\:q,\:r}{}{\bot,\:\neg p,\:A} \quad(*)
+                                                    &  & L\imp\; \eqref{ex1:3}
+        \\[1ex]
+        % --------------------------------------------------------------------
+        \hline
+        \label{ex1:5}
+        \tseqfrd{1}{\neg\neg p,\:p,\:q}{r}{\bot,\:\neg p,\:A}
+                                                    &  & \mathrm{Succ}\; \eqref{ex1:4}
+        \\[1ex]
+        \label{ex1:6}
+        \tseqfrd{1}{\neg\neg p,\:p,\:q}{r}{\bot,\:\neg p,\:A,\:p\imp r} \quad(*)
+                                                    &  & R\imp\; \eqref{ex1:5}
+        \\[1ex]
+        % --------------------------------------------------------------------
+        \hline
+        \label{ex1:7}
+        \tseqfrd{2}{\neg\neg p}{p,\:q} {\bot,\:\neg p,\:A,p\imp r,\:r}
+                                                    &  & \mathrm{Succ}\; \eqref{ex1:6}
+        \\[1ex]
+        \label{ex1:8}
+        \tseqfrd{2}{p\imp q,\:\neg\neg p}{p,\:q}{\bot,\:\neg p,\:A,p\imp r,\:r}
+                                                    &  & L\imp\; \eqref{ex1:7}
+        \\[1ex]
+        \label{ex1:9}
+        \tseqfrd{2}{p\imp q,\:\neg\neg p}{p,\:q}{\bot,\:\neg p,\:A,p\imp r,\:r,\:B}
+                                                    &  & R\imp\; \eqref{ex1:8}
+        \\[1ex]
+        \label{ex1:10}
+        \tseqfrd{2}{C,\:p\imp q,\:\neg\neg p}{p,\:q}  {\bot,\:\neg p,\:A,p\imp r,\:r,\:B}
+                                                    &  & L\imp\; \eqref{ex1:9}
+        \\[1ex]
+        \label{ex1:11}
+        \tseqfrd{2}{C,\:p\imp q,\:\neg\neg p}{p,\:q}
+        {\bot,\:\neg p,\:A,p\imp r,\:r,\:B,\:C\imp (p\lor \neg p)}\quad(*)
+                                                    &  & R\imp\; \eqref{ex1:10}
+    \end{align}
+    \caption{Costruzione del calcolo ${\bf RGD}(G)$-refutazione di $G$; I p-sequenti sono evidenziati da (*).}
+    \label{fig:ex1}
+\end{figure}
+
 \end{document}

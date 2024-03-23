@@ -25,6 +25,12 @@
 \RequirePackage{float}
 \RequirePackage{algpseudocode}
 \RequirePackage{algorithm}
+\RequirePackage{bussproofs}\EnableBpAbbreviations
+\RequirePackage{tikz}
+\RequirePackage{xifthen}
+\RequirePackage{stmaryrd}
+\RequirePackage{enumitem}
+\RequirePackage{url}
 \RequirePackage{parskip}
 \RequirePackage{booktabs}
 \RequirePackage{xstring}
@@ -40,11 +46,23 @@
 \RequirePackage{verbatim}
 \RequirePackage{comment}
 \RequirePackage{parskip}
+\RequirePackage{lipsum}
+\RequirePackage{mathrsfs}
+\RequirePackage{theorem}
 
 \newcounter{mytaskscounter}
 \newcounter{mybrieftaskscounter}
 \newcounter{mycelllinescounter}
 \newcounter{mybalancingmodescounter}
+\newcounter{examplecounter}
+
+\newenvironment{example}{\begin{quote}%
+        \refstepcounter{examplecounter}%
+        \textbf{Esempio \arabic{examplecounter}}%
+        \quad
+        }{%
+    \end{quote}%
+}
 
 \def\savetask#1{%
     \stepcounter{mytaskscounter}%
@@ -295,3 +313,219 @@
 \newcommand{\sqr}[1]{\left[#1\right]}
 \newcommand{\ssqr}[1]{\llbracket#1\rrbracket}
 \newcommand{\crl}[1]{\left\{#1\right\}}
+
+% STANDARD SEQUENT
+\newcommand{\emptySet}{\cdot}
+\newcommand{\seqsArrow}{\vdash}
+\newcommand{\seqs}[2]{
+    \ifthenelse{\isempty{#1}}{\emptySet}{#1} % left 
+    \seqsArrow
+    \ifthenelse{\isempty{#2}}{\emptySet}{#2}
+}
+
+\newcommand{\seqslj}[2]{
+    \ifthenelse{\isempty{#1}}{\emptySet}{#1} % left 
+    \Rightarrow
+    \ifthenelse{\isempty{#2}}{\emptySet}{#2}
+}
+
+\newcommand{\Lhs}[1]{\mathrm{Lhs}(#1)} % left side  of seq.
+\newcommand{\Rhs}[1]{\mathrm{Rhs}(#1)} % right side of seq.
+
+% LOGICS AND CALCOLI
+\newcommand{\CPL}{\mathrm{CPL}\xspace}
+\newcommand{\IPL}{\mathrm{IPL}\xspace}
+\newcommand{\GD}[1]{\mathrm{GD}_{#1}\xspace}
+\newcommand{\LC}{\mathrm{LC}\xspace}
+\newcommand{\RBU}{\mathbf{Rbu}\xspace}
+\newcommand{\FRJname}{\mathbf{FRJ}\xspace} % Frj 
+\newcommand{\FRJof}[1]{\mathbf{FRJ}(#1)\xspace} % Frj(G)
+\newcommand{\GBUof}[1]{\mathbf{Gbu}(#1)\xspace} % Gbu(G)
+%%%\newcommand{\GBUof}[1]{\mathbf{Gbu}\xspace} % Gbu - G non viene visualizzato
+\newcommand{\GBUTab}{\mathbf{Gbu}\xspace} % Gbu(G)
+\newcommand{\SF}{\mathbf{S4}}
+\newcommand{\SV}{\mathbf{S5}}
+\newcommand{\KL}{\mathbf{K}}
+
+% FRDUM SEQUENT
+\newcommand{\seqfrdArrow}{\nRightarrow}
+
+\newcommand{\seqfrd}[4]{
+    \ifthenelse{\isempty{#2}}{\emptySet}{#2}
+    \seqfrdArrow_{#1}
+    \ifthenelse{\isempty{#3}}{\emptySet}{#3}
+    \,;\,
+    \ifthenelse{\isempty{#4}}{\emptySet}{#4}
+}
+
+\newcommand{\tseqfrd}[4]{
+    \ifthenelse{\isempty{#2}}{\emptySet}{#2}
+    & \; \seqfrdArrow_{#1}\;
+    \ifthenelse{\isempty{#3}}{\emptySet}{#3}
+    \,;\,
+    \ifthenelse{\isempty{#4}}{\emptySet}{#4}
+}
+
+%%  RULE NAMES
+\newcommand{\ruleAX}{\mathrm{Ax}\xspace}
+\newcommand{\ruleS}{\mathrm{Succ}\xspace}
+
+% LOGICAL SYMBOLS
+\newcommand{\imp}{\supset}
+\newcommand{\proves}[3]{\vdash^{#1}_{#2} #3}
+\newcommand{\nproves}[2]{{\not\vdash}_{#1} #2}
+
+% KRIPKE MODELS
+\newcommand{\K}{\Kcal}
+\newcommand{\forcing}{\Vdash}
+\newcommand{\forcings}{\Vdash^*}
+\newcommand{\nforcing}{\nVdash}
+\newcommand{\nforcings}{\nVdash^*}
+\newcommand{\Modname}{\mathrm{Mod}}
+\newcommand{\Mod}[1]{\Modname(#1)}
+\newcommand{\Rcalc}[1]{\mathbf{R{\mbox{\smallfont {\bf GD}}}}(#1)}
+
+% CALLIGRAPHICS
+\newcommand{\Acal}{\mathcal{A}}
+\newcommand{\Bcal}{\mathcal{B}}
+\newcommand{\Ccal}{\mathcal{C}}
+\newcommand{\Dcal}{\mathcal{D}}
+\newcommand{\Ecal}{\mathcal{E}}
+\newcommand{\Fcal}{\mathcal{F}}
+\newcommand{\Gcal}{\mathcal{G}}
+\newcommand{\Hcal}{\mathcal{H}}
+\newcommand{\Kcal}{\mathcal{K}}
+\newcommand{\Ical}{\mathcal{I}}
+\newcommand{\Jcal}{\mathcal{J}}
+\newcommand{\Lcal}{\mathcal{L}}
+\newcommand{\Mcal}{\mathcal{M}}
+\newcommand{\Ncal}{\mathcal{N}}
+\newcommand{\Pcal}{\mathcal{P}}
+\newcommand{\Qcal}{\mathcal{Q}}
+\newcommand{\Rcal}{\mathcal{R}}
+\newcommand{\Scal}{\mathcal{S}}
+\newcommand{\Tcal}{\mathcal{T}}
+\newcommand{\Vcal}{\mathcal{V}}
+\newcommand{\Xcal}{\mathcal{X}}
+\newcommand{\Ycal}{\mathcal{Y}}
+
+% GREEKS
+\renewcommand{\a}{\alpha}
+\renewcommand{\b}{\beta}
+\newcommand{\g}{\gamma}
+\renewcommand{\d}{\delta}
+\newcommand{\s}{\sigma}
+\newcommand{\D}{\Delta}
+\newcommand{\G}{\Gamma}
+
+% MATHBF
+\newcommand{\Cbo}{\mathbf{C}}
+
+\newcommand{\EndEs}{\mbox{}~\hfill$\Diamond$}
+
+% GENERIC MATH
+\newcommand{\stru}[1]{\langle #1 \rangle} % struttura
+
+
+% FUNCTIONS 
+\newcommand{\depth}[1]{\mathrm{d}(#1)}  %
+\newcommand{\wgname}{\mathrm{wg}}
+\newcommand{\wg}[1]{\wgname(#1)}
+\newcommand{\tp}[1]{\mathrm{tp}(#1)}
+\newcommand{\tpm}[1]{\mathrm{tp}^-(#1)}
+\newcommand{\card}[1]{||#1||}
+\newcommand{\size}[1]{| #1|}
+\newcommand{\height}[1]{\mathrm{h}(#1)}
+\newcommand{\Star}[1]{(#1)^*}
+\newcommand{\Sat}[2]{\mathrm{Sat}_{#1}(#2)}
+
+% NAMES FOR SETS and funztions
+\newcommand{\PV}{\mbox{$\mathcal{V}$}\xspace} % Prop. variables
+\newcommand{\Prime}{\PV^\bot\xspace}  % Prime formuals
+
+% subformulas
+\newcommand{\Sf}[1]{\mathrm{Sf}(#1)}
+\newcommand{\Sfat}[1]{\mathrm{Sf}^{\mathrm{At}}(#1)}
+
+\newcommand{\Sfgname}{\mathscr{Sx}}
+\newcommand{\Sfg}[1]{\Sfgname(#1)}
+% \newcommand{\Sfm}[1]{\mathrm{Sf}^-(#1)}
+\newcommand{\Sflname}{\mathscr{Sl}}
+\newcommand{\Sfl}[1]{\Sflname(#1)}
+\newcommand{\Sflat}[1]{\Sflname^{\mathrm{At}}(#1)}
+\newcommand{\Sflimp}[1]{\Sflname^{\imp}(#1)}
+\newcommand{\Sflatimp}[1]{\Sflname^{\mathrm{At},\imp}(#1)}
+\newcommand{\Sfrname}{\mathscr{Sr}}
+\newcommand{\Sfr}[1]{\Sfrname(#1)}
+\newcommand{\Sfrat}[1]{\Sfrname^{\mathrm{At}}(#1)}
+\newcommand{\Sfrimp}[1]{\Sfrname^{\imp}(#1)}
+\newcommand{\Sfratimp}[1]{\Sfrname^{\mathrm{At},\imp}(#1)}
+\newcommand{\Sfgat}[1]{\Sfgname^{\mathrm{At}}(#1)}
+\newcommand{\Sfgimp}[1]{\Sfgname^{\imp}(#1)}
+\newcommand{\Sfgatimp}[1]{\Sfgname^{\mathrm{At},\imp}(#1)}
+
+\newcommand{\Gat}{\G^{\mathrm{At}}}
+\newcommand{\Dat}{\D^{\mathrm{At}}}
+\newcommand{\Lat}{\Lambda^{\mathrm{At}}}
+\newcommand{\Gimp}{\G^\imp}
+\newcommand{\Oat}{\Omega^{\mathrm{At}}}
+\newcommand{\Oimp}{\Omega^{\mathrm{\imp}}}
+\newcommand{\Xat}{\Xi^{\mathrm{At}}}
+\newcommand{\Ximp}{\Xi^{\mathrm{\imp}}}
+\newcommand{\bG}{{\overline\G}}
+\newcommand{\bD}{{\overline\D}}
+\newcommand{\bGat}{{\overline\G}^{\mathrm{At}}}
+\newcommand{\bGimp}{{\overline\G}^\imp}
+\newcommand{\bDat}{{\overline\D}^{\mathrm{At}}}
+\newcommand{\bDimp}{{\overline\D}^\imp}
+% \newcommand{\Dat}{{\D}^{\mathrm{At}}}
+% \newcommand{\Gat}{{\G}^{\mathrm{At}}}
+
+\newcommand{\That}{\Theta^{\mathrm{At}}}
+\newcommand{\Omegaat}{\Omega^{\mathrm{At}}}
+\newcommand{\Omegaimp}{\Omega^{\imp}}
+\newcommand{\Thimp}{\Theta^\imp}
+\newcommand{\Thimpt}{{\tilde{\Theta}}^\imp}
+\newcommand{\Sigat}{\Sigma^{\mathrm{At}}}
+\newcommand{\Sigimp}{\Sigma^\imp}
+%\newcommand{\Lat}{\Lambda^{\mathrm{At}}}
+\newcommand{\Limp}{\Lambda^\imp}
+\newcommand{\Lambdas}{\Lambda^*}
+\newcommand{\Lambdasi}{\Lambda^{*_\imp}}
+\newcommand{\Fmimp}{\Lcal^\imp}
+
+\newcommand{\Clop}[1]{\Ccal l^+(#1)}
+\newcommand{\Clom}[1]{\Ccal l^-(#1)}
+%\newcommand{\Clog}[1]{\overline{\Ccal l}(#1)}
+%\newcommand{\Restr}[2]{#1/#2}
+
+\newcommand{\PS}[1]{\mathrm{P}(#1)}
+
+\newcommand{\mapstoz}{\mapsto_0}
+\newcommand{\mapstozn}{\stackrel{-}{\mapsto}_0}
+\newcommand{\mapstozr}[1]{\stackrel{#1}{\mapsto_0}}
+\newcommand{\mapston}{\stackrel{-}{\mapsto}}
+\newcommand{\mapstos}{\mapsto_*}
+\newcommand{\mapstosn}{\stackrel{-}{\mapsto}_*}
+\newcommand{\mapstois}{\mapsto^\mathtt{Ir}_*}
+
+\newcommand{\Upsilonat}{\Upsilon^{\mathrm{At}}}
+\newcommand{\Upsilonimp}{\Upsilon^\imp}
+\newcommand{\Omat}{\Omega^{\mathrm{At}}}
+\newcommand{\Omimp}{\Omega^\imp}
+\newcommand{\Uat}{\Upsilon^{\mathrm{At}}}
+\newcommand{\Uimp}{\Upsilon^\imp}
+
+\newcommand{\Psiat}{\Psi^{\mathrm{At}}}
+\newcommand{\Psiimp}{\Psi^\imp}
+
+%% Macro for algorithm2e
+\newcommand{\ass}{\;\leftarrow\;}
+
+\makeatletter  %% used in align 
+\newcommand{\leqnomode}{\tagsleft@true}
+\newcommand{\reqnomode}{\tagsleft@false}
+\makeatother
+
+%%% MODELLI DI KRIPKE
+\newcommand{\Val}{V}
