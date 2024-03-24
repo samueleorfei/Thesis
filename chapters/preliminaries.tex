@@ -119,8 +119,6 @@ Le condizioni per la terminazione sono due:
     \item Quando si ottiene un sequente che rispetta la seguente regola: $G \in Cl^{-}(\Delta \cup \Lambda)$
 \end{itemize}
 
-\newpage
-
 Di seguito verranno mostrate le formalizzazioni delle regole del calcolo spiegate sopra.
 
 \begin{figure}[h]
@@ -186,7 +184,7 @@ Di seguito verranno mostrate le formalizzazioni delle regole del calcolo spiegat
             \DP
             \quad
             \begin{minipage}{15em}
-                $\seqfrd{k}{\G}{\Lambda}{\D}$ is saturated
+                $\seqfrd{k}{\G}{\Lambda}{\D}$ \'e saturo
                 \\[1ex]
                 % $\Lambda' \subseteq\PV$           \\[1ex]
                 $\emptyset\subset \Lambda' \subseteq G \cap PV $
@@ -196,6 +194,8 @@ Di seguito verranno mostrate le formalizzazioni delle regole del calcolo spiegat
     \caption{Il calcolo di refutazione ${\bf RGD}(G)$.}
     \label{fig:frdum}
 \end{figure}
+
+\newpage
 
 \begin{example}\label{ex:ex1}
     Consideriamo la seguente formula $G$:
@@ -211,13 +211,13 @@ Di seguito verranno mostrate le formalizzazioni delle regole del calcolo spiegat
             C\;=\;B\imp (\neg\neg p \land q)
         \end{array}
     \]
-    Cerchiamo una ${\bf RGD}(G)$-derivazione costruendo un database dei sequenti provati secondo le indicazioni
-    descritte in ~\cite{VoronkovHAR:01}: cominciamo con inserire tutti gli assiomi; poi entriamo in un ciclo dove, ad ogni iterazione,
+    Cerchiamo una derivazione ${\bf RGD}(G)$ costruendo un database dei sequenti secondo le indicazioni
+    descritte in ~\cite{VoronkovHAR:01}: cominciamo con l'inserimento di tutti gli assiomi; poi entriamo in un ciclo dove, ad ogni iterazione,
     applichiamo tutte le possibile regole ai sequenti collezionati nei passaggi precedenti. Il ciclo termine quanto un sequente del tipo $\seqfrd{k}{\Gamma}{\Lambda}{\D}$ con
     $G\in\Clom{\D\cup\Lambda}$ viene generato, oppure quando nessun altro sequente pu\'o essere aggiunto al database (database saturo).
-    Fig.~\ref{fig:ex1} mostra il frammento di database contenente i sequenti necessari per ottenere la ${\bf RGD}(G)$-derivazione di $G$. Nell'esempio,
+    Fig.~\ref{fig:ex1} mostra il frammento di database contenente i sequenti necessari per ottenere la derivazione ${\bf RGD}(G)$ di $G$. Nell'esempio,
     identifichiamo con $\s_{(j)}$ il sequente alla linea~$(j)$ della
-    Fig.~\ref{fig:ex1}. Nell'esempio, il sequente $\s_{\eqref{ex1:2}}$
+    Fig.~\ref{fig:ex1}. Come si pu\'o notare, il sequente $\s_{\eqref{ex1:2}}$
     viene ottenuto applicando la regola $R\imp$ al sequente
     $\s_{\eqref{ex1:1}}$, cio\'e,:
     \[
@@ -322,7 +322,7 @@ Di seguito verranno mostrate le formalizzazioni delle regole del calcolo spiegat
         {\bot,\:\neg p,\:A,p\imp r,\:r,\:B,\:C\imp (p\lor \neg p)}\quad(*)
                                                     &  & R\imp\; \eqref{ex1:10}
     \end{align}
-    \caption{Costruzione del calcolo ${\bf RGD}(G)$-refutazione di $G$; I p-sequenti sono evidenziati da (*).}
+    \caption{Costruzione del calcolo di refutazione ${\bf RGD}(G)$ di $G$; I p-sequenti sono evidenziati da (*).}
     \label{fig:ex1}
 \end{figure}
 
