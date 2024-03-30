@@ -92,7 +92,7 @@ La lettura della formula da file di testo comporta l'ottenimento della stringa r
 Dalla stringa però bisogna passare alla rappresentazione interna (astrazione) per poterla poi utilizzare per il calcolo di refutazione. A tal proposito è stato definito un interprete di espressioni logiche (Lexer + Parser) che, data una stringa rappresentante una formula, restituisce la sua rappresentazione interna. \\
 Le due componente dell' interprete sono:
 \begin{itemize}
-  \item \textbf{Lexer:} Il Lexer è quel componente dell'interprete che utilizzando una grammatica definita (insieme di simboli che rappresentano caratteri o insiemi di caratteri specifici a cui viene assegnato un significato), trasforma una stringa in una lista di \textit{Token}. Un Token è una via di mezzo tra la rappresentazione interna e la rappresentazione ad alto livello ed è rappresentato come una tupla tra il carattere letto, e la sua tipologia di appartenenza definita dalla grammatica.
+  \item \textbf{Lexer:} Il Lexer è quel componente dell'interprete che utilizzando una grammatica definita (insieme di simboli che rappresentano caratteri o insiemi di caratteri specifici a cui viene assegnato un significato), trasforma una stringa in una lista di \textit{Token}. Un Token è una via di mezzo tra la rappresentazione interna e la rappresentazione ad alto livello; un token è un termine che fornisce una rappresentazione astratta degli elementi del linguaggio che il parser deve analizzare.
   \item \textbf{Parser:} Il Parser è quel componente dell'interprete che, ricevendo in input la lista di \textit{Token} creata dal Lexer, la utilizza per creare la rappresentazione interna della stringa (in questo caso, una espressione logica).
 \end{itemize}
 Questo passaggio è reso obbligatorio dalla scelta di utilizzare i file di testo (ed in generale, le stringhe) per definire le formule.
@@ -100,7 +100,7 @@ Essendo il processo di interpretazione complesso e con possibilità di errori, �
 
 \section{Calcolo}
 Dopo aver ottenuto la rappresentazione interna della formula \textit{obiettivo}, è possibile eseguire l'algoritmo per il calcolo di refutazione. \\
-L'algoritmo è basato sul metodo inverso, introdotto da Maslov. E' una tecnica dimostrativa che si basa sulla saturazione dove, data una formula obiettivo, vengono definite una serie di regole, che vengono poi applicate sequenzialmente. \\
+L'algoritmo è basato sul metodo inverso, introdotto da Maslov \cite{Maslov:67}. E' una tecnica dimostrativa che si basa sulla saturazione dove, data una formula obiettivo, vengono definite una serie di regole, che vengono poi applicate sequenzialmente. \\
 La ricerca della prova finisce quando:
 \begin{itemize}
   \item L'obiettivo è stato ottenuto

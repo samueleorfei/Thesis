@@ -4,16 +4,20 @@
 \chapter{Preliminari}
 \addcontentsline{toc}{chapter}{Preliminari}
 
+In questa sezione verranno discusse le definizioni formali delle principali nozioni logiche utilizzate per l'implementazione dell'algoritmo.
+
+\section{Definizione}
+
 Le formule, denotate da lettere latine maiuscole, sono costruite da un insieme infinito di variabili proposizionali $V = \{p,q,p_1,p_2,...\}$, dalla costante $\bot$ e dai connettivi $\land, \lor, \supset$. \\
-E' importante sottolineare il fatto che nella logica di G\"odel-Dummett, l'espressione $\neg A$ rappresenta la forma abbreviata per $A \supset \bot$. \\
+Nel seguito viene anche usato il connettivo definito $\neg$: la formula $\neg A$ è una abbreviazione per $A \supset \bot$. \\
 
 L'implementazione dell'algoritmo fa uso di alcune nozioni matematiche per la manipolazione e l'estrapolazione di informazioni da una \textit{formula}, quali: \\
 \begin{itemize}
-    \item sottoformula
-    \item sottoformula sinistra
-    \item sottoformula destra
-    \item Chiusura positiva
-    \item Chiusura negativa
+    \item Sottoformula.
+    \item Sottoformula sinistra.
+    \item Sottoformula destra.
+    \item Chiusura positiva.
+    \item Chiusura negativa.
 \end{itemize}
 
 \newpage
@@ -21,21 +25,27 @@ L'implementazione dell'algoritmo fa uso di alcune nozioni matematiche per la man
 \section{Sottoformule}
 
 Sia G una formula; $Sf(G)$ è l'insieme di tutte le sottoformule di $G$, inclusa $G$ stessa.
+Formalmente:
+\begin{itemize}
+    \item $G \in Sf(G)$
+    \item Se $A \land B \in Sf(G)$, allora $A \in Sf(G)$ e $B \in Sf(G)$
+    \item Se $A \lor B \in Sf(G)$, allora $A \in Sf(G)$ e $B \in Sf(G)$
+    \item Se $\neg A \in Sf(G)$, allora $A \in Sf(G)$ e $\bot \in Sf(G)$
+\end{itemize}
 
-Una sottoformula è una formula contenuta in G (Es. Se $G = A \land B$, le sottoformule sono: $A$, $B$ e $G$ stessa). \\
 Le sottoformule possono dividersi in altre 2 categorie di formule:
 \begin{itemize}
     \item Negative (o sinistre)
     \item Positive (o destre)
 \end{itemize}
 
-Con il termine $SL(G)$ denotiamo il sottoinsieme di formule negative estratto da $Sf(G)$, mentre con $SR(G)$ denotiamo il sottoinsieme di formule positive. \\
+Con il termine $SL(G)$ denotiamo il sottoinsieme di formule negative estratto da $Sf(G)$, mentre con $SR(G)$ denotiamo il sottoinsieme di formule positive (\cite{TroSch:00}). \\
 Formalmente, $SL(G)$ ed $SR(G)$ sono i più piccoli sottoinsiemi di $Sf(G)$ tali che:
 \begin{itemize}
     \item $G \in SR(G)$
-    \item $A \odot B \in SX(G) \supset \{A, B\} \subseteq SX(G)$, dove $\odot \in \{\land, \lor\}$, e $SX \in \{SL, SR\}$
-    \item $A \supset B \in SL(G) \supset B \in SL(G) \land A \in SR(G)$
-    \item $A \supset B \in SR(G) \supset B \in SR(G) \land A \in SL(G)$
+    \item $A \odot B \in SX(G) \Rightarrow \{A, B\} \subseteq SX(G)$, dove $\odot \in \{\land, \lor\}$, e $SX \in \{SL, SR\}$
+    \item $A \supset B \in SL(G) \Rightarrow B \in SL(G) \land A \in SR(G)$
+    \item $A \supset B \in SR(G) \Rightarrow B \in SR(G) \land A \in SL(G)$
 \end{itemize}
 
 Per $SX \in \{SL, SR\}$ abbiamo:
@@ -62,9 +72,9 @@ Nel caso una formula sia composta da più sottoformule, va eseguita una ricerca 
 
 \section{Le logiche $GD_k$ e $GD$}
 
-Consideriamo le logiche di G\"odel-Dummett $GD_k$ ($k \geq 0$) e $GD$ definite nel seguente modo:
+consideriamo le logiche di G\"odel-Dummett $GD_k$ ($k \geq 0$) e $GD$ definite nel seguente modo (\cite{ChaZak:97}):
 \begin{itemize}
-    \item $GD_k$ è l'insieme di formule valide nei modelli lineari $K$, tali che $h(K) \leq k$.
+    \item $GD_k$ è l'insieme di formule valide nei modelli lineari $K$, tali che $h(K) \leq k$ (\cite[p.~2--3]{DBLP:conf/cilc/Fiorentini022}).
     \item $GD = \bigcap_{k \geq 0}GD_k$
 \end{itemize}
 Va sottolineato il fatto che $IPL \subset GD \subset \dots \subset GD_2 \subset GD_1 \subset GD_0 = CPL$, dove $CPL$ è l'insieme delle formule valide nella logica classica.
@@ -78,7 +88,7 @@ Il calcolo agisce sui $RGD(G)$-sequenti che hanno la forma $\Gamma \not\Rightarr
     \item Se $k = 0$, allora $\Lambda = \emptyset$
     \item Se $k \geq 0$, allora $\Gamma \subseteq SL^{at,\supset}(G)$, $\Lambda \subseteq SL^{at}(G) \cap SR^{at}(G)$, $\Delta \subseteq SR^{at,\supset}(G)$
 \end{itemize}
-Il rango di $\sigma = \Gamma \not\Rightarrow_k \Lambda; \Delta$, identificato da Rn($\sigma$), è k. Un sequente è un'entità della logica che permette di esprimere legami tra asserzioni.
+Il rango di $\sigma = \Gamma \not\Rightarrow_k \Lambda; \Delta$, identificato da Rn($\sigma$), è k. Un sequente è un termine della logica che permette di esprimere legami tra asserzioni.
 
 Il calcolo è una procedura che si compone di più fasi. Dato un obiettivo $G$, i passaggi che deve eseguire sono:
 \begin{itemize}
@@ -90,20 +100,20 @@ Il calcolo è una procedura che si compone di più fasi. Dato un obiettivo $G$, 
                         \item Caso $\Lambda = \emptyset$:
                               \begin{itemize}
                                   \item La formula NON deve essere compresa nell'insieme unione tra $\Gamma$ e $\Delta$ ($A \supset B \notin \Gamma \cup \Delta$)
-                                  \item Il primo operatore dell'implicazione deve appartenere alla chiusura negativa di $\Delta$ ($A \in Cl^{-}(\Delta)$)
+                                  \item L'antecedente dell'implicazione deve appartenere alla chiusura negativa di $\Delta$ ($A \in Cl^{-}(\Delta)$)
                               \end{itemize}
                         \item Altrimenti:
                               \begin{itemize}
                                   \item La formula NON deve essere compresa nell'insieme unione tra $\Gamma$ e $\Delta$ ($A \supset B \notin \Gamma \cup \Delta$)
-                                  \item Il primo operatore dell'implicazione deve appartenere alla chiusura negativa dell'unione tra $\Delta$ e $\Lambda$ ($A \in Cl^{-}(\Delta \cup \Lambda)$)
-                                  \item Il secondo operatore dell'implicazione deve appartenere alla chiusura positiva dell'unione tra $\Gamma$ e $\Lambda$ ($B \in Cl^{+}(\Gamma \cup \Lambda)$)
+                                  \item L'antecedente dell'implicazione deve appartenere alla chiusura negativa dell'unione tra $\Delta$ e $\Lambda$ ($A \in Cl^{-}(\Delta \cup \Lambda)$)
+                                  \item Il conseguente dell'implicazione deve appartenere alla chiusura positiva dell'unione tra $\Gamma$ e $\Lambda$ ($B \in Cl^{+}(\Gamma \cup \Lambda)$)
                               \end{itemize}
                     \end{itemize}
               \item Regola destra ($R\supset$): Viene aggiunta una nuova formula del tipo $A \supset B$ nella parte destra del sequente, che corrisponde all'insieme $\Delta$. La formula scelta, deve rispettare determinate condizioni per poter essere aggiunta all'insieme $\Delta$, ossia:
                     \begin{itemize}
                         \item La formula NON deve essere compresa nell'insieme unione tra $\Delta$ e $\Delta$ ($A \supset B \notin \Delta \cup \Delta$)
-                        \item Il primo operatore dell'implicazione deve appartenere alla chiusura positiva dell'insieme $\Gamma$ ($A \in Cl^{+}(\Gamma)$)
-                        \item Il secondo operatore dell'implicazione deve appartenere alla chiusura negativa dell'unione tra $\Delta$ e $\Lambda$ ($B \in Cl^{-}(\Delta \cup \Lambda)$)
+                        \item L'antecedente dell'implicazione deve appartenere alla chiusura positiva dell'insieme $\Gamma$ ($A \in Cl^{+}(\Gamma)$)
+                        \item Il conseguente dell'implicazione deve appartenere alla chiusura negativa dell'unione tra $\Delta$ e $\Lambda$ ($B \in Cl^{-}(\Delta \cup \Lambda)$)
                     \end{itemize}
               \item Regola "successore": In termini di costruzione del contro-modello, questa regola corrisponde all'espansione di un modello, tramite aggiunta di una nuova radice al posto di quella corrente. A livello di sequenti, si tratta di generare tutti i possibili insiemi $\Lambda^{'}$ che rispettano una certa regola e di verificare, reiterando l'algoritmo per ognuno di essi, se ce n'è uno che porta alla soluzione. Per ogni $\Lambda^{'}$, si eliminano da $\Gamma$ gli elementi in comune e si aggiungono in $\Lambda$. Dopodichè si aggiunge l'intero $\Lambda$ originale a $\Delta$. I criteri con cui vengono generati i $\Lambda^{'}$ sono:
                     \begin{itemize}
