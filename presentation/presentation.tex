@@ -45,12 +45,35 @@
     \subsection{Introduzione}
     \begin{frame}{Introduzione}
 
-        \begin{block}{Logiche di G\"odel-Dummett}
-            Famiglia di logiche dette \textit{intermedie}, caratterizzate da modelli lineari (di qualunque profondità).
+        Il punto di interesse principale del progetto sono le logiche di G\"odel-Dummett. \\
+        Si tratta di una famiglia infinita di logiche dette \textit{intermedie}, caratterizzate da modelli lineari (di qualunque profondità). \\
+        Per tali logiche sono noti vari calcoli e strategie di prove.
+
+    \end{frame}
+
+    \subsection{Obiettivo}
+    \begin{frame}{Obiettivo}
+
+        Si vuole definire un algoritmo, e la sua implementazione, che ha come obiettivo quello di definire un calcolo logico in grado di dimostrare la non-validità di una formula in ciascuna delle logiche di G\"odel-Dummett.\\
+
+    \end{frame}
+
+    \subsection{Teoria}
+    \begin{frame}{Definizioni}
+        \begin{block}{Calcolo di refutazione}
+            Il calcolo $RGD(G)$ è un procedimento per inferire la non-provabilità di $G$ in $GD_k$, pensato per supportare una ricerca in avanti di una refutazione.
+            Data una logica $L$ ed una formula $A$, se si costruisce una derivazione di $A$ nel calcolo per $L$, allora la formula $A$ non è valida nella logica $L$.
+            Dalla derivazione è possibile ottenere un \textit{contro-modello} per $A$, ossia un modello nella logica $L$ in cui $A$ è falsificata.
         \end{block}
 
-        Si vuole definire un algoritmo, e la sua implementazione, che ha come obiettivo quello di definire un calcolo logico per la generazioni di contro-modelli per le formule non valide nella logica di G\"odel-Dummett.\\
-
+        \begin{block}{Regole del calcolo}
+            \begin{itemize}
+                \item Regola sinistra: $\Gamma \not\Rightarrow_k \Lambda; \Delta \rightarrow A \supset B, \Gamma \not\Rightarrow_k \Lambda; \Delta$
+                \item Regola destra: $\Gamma \not\Rightarrow_k \Lambda; \Delta \rightarrow \Gamma \not\Rightarrow_k \Lambda; \Delta, A \supset B$
+                \item Regola successore: $\Gamma \not\Rightarrow_k \Lambda; \Delta \rightarrow \Gamma \setminus \Lambda^{'} \not\Rightarrow_{k+1} \Lambda^{'}; \Delta, \Lambda$
+                \item Condizioni di termininazione: generazione di $\Gamma \not\Rightarrow_k \Lambda; \Delta$ con $G \in Cl^-(\Delta \cup \Lambda)$
+            \end{itemize}
+        \end{block}
     \end{frame}
 
     \subsection{Requisiti Funzionali}
@@ -68,8 +91,8 @@
         \begin{itemize}
             \item Supporto degli operatori logici $\land$, $\lor$, $\supset$, $\not$
             \item Supporto di proposizioni atomiche e di costanti come $\bot$
-            \item Supporto di formule innestate mediante interpretazione dei caratteri parentesi: tonda, quadra e graffa
-            \item Supporto della lettura della formula sia sotto forma di stringa che di rappresentazione interna (tipo \textit{Formula})
+            \item Supporto di formule innestate
+            \item Supporto della lettura della formula sia sotto forma di stringa che di rappresentazione interna
         \end{itemize}
 
     \end{frame}
@@ -85,22 +108,13 @@
         \end{itemize}
     \end{frame}
 
-    \subsection{Teoria}
-    \begin{frame}{Definizioni formali}
-        \framesubtitle{Definizioni}
+    \subsection{Struttura del progetto}
+    \begin{frame}{Struttura del progetto}
         \begin{itemize}
-            \item sottoformula sinistra o destra
-            \item Chiusura positiva o negativa
-            \item Sequente: Tripla di 3 insiemi ($\Lambda, \Gamma, \Delta$)
-            \item Calcolo RGD: Precedimento ricorsivo di applicazione delle regole ai sequenti ed espansione del contro-modello
-        \end{itemize}
-
-        \framesubtitle{Regole algoritmo}
-        \begin{itemize}
-            \item Regola sinistra L->: Inserimento della sottoformula nell'insieme sinistro del sequente
-            \item Regola destra R->: Inserimento della sottoformula nell'insieme destro del sequente
-            \item Regola successore: Cambio di radice
-            \item Condizioni di termininazione: Elementi finiti o sequenti saturi
+            \item Modulo \textit{Lexer} che trasforma una formula sotto forma di stringa in un insieme di \textit{Token}
+            \item Modulo \textit{Parser} che trasforma l'insieme di \textit{Token} nella rappresentazione interna della formula
+            \item Modulo \textit{Expression} che racchiude le funzioni per la manipolazione, trasformazione o estrazione di dati da una data formula
+            \item Modulo \textit{Calculus} che racchiude le funzioni che rappresentano l'algoritmo stesso
         \end{itemize}
     \end{frame}
 
@@ -119,16 +133,6 @@
             \item Librerie utilizzate durante lo sviluppo (List, Set, Map)
             \item IDE e/o editor di testo (Visual Studio Code)
             \item Versionamento (Github)
-        \end{itemize}
-    \end{frame}
-
-    \subsection{Struttura del progetto}
-    \begin{frame}{Struttura del progetto}
-        \begin{itemize}
-            \item Modulo \textit{Lexer} che trasforma una formula sotto forma di stringa in un insieme di \textit{Token}
-            \item Modulo \textit{Parser} che trasforma l'insieme di \textit{Token} nella rappresentazione interna della formula
-            \item Modulo \textit{Expression} che racchiude le funzioni per la manipolazione, trasformazione o estrazione di dati da una data formula
-            \item Modulo \textit{Calculus} che racchiude le funzioni che rappresentano l'algoritmo stesso
         \end{itemize}
     \end{frame}
 
