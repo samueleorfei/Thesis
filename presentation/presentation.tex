@@ -59,13 +59,16 @@
     \end{frame}
 
     \subsection{Teoria}
+
     \begin{frame}{Definizioni}
         \begin{block}{Calcolo di refutazione}
             Il calcolo $RGD(G)$ è un procedimento per inferire la non-provabilità di $G$ in $GD_k$, pensato per supportare una ricerca in avanti di una refutazione.
             Data una logica $L$ ed una formula $A$, se si costruisce una derivazione di $A$ nel calcolo per $L$, allora la formula $A$ non è valida nella logica $L$.
             Dalla derivazione è possibile ottenere un \textit{contro-modello} per $A$, ossia un modello nella logica $L$ in cui $A$ è falsificata.
         \end{block}
+    \end{frame}
 
+    \begin{frame}{Definizioni}
         \begin{block}{Regole del calcolo}
             \begin{itemize}
                 \item Regola sinistra: $\Gamma \not\Rightarrow_k \Lambda; \Delta \rightarrow A \supset B, \Gamma \not\Rightarrow_k \Lambda; \Delta$
