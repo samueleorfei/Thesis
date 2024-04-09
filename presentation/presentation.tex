@@ -63,9 +63,11 @@
     \begin{frame}{Definizioni}
         \begin{block}{Calcolo di refutazione}
             Il calcolo $RGD(G)$ è un procedimento per inferire la non-provabilità di $G$ in $GD_k$, pensato per supportare una ricerca in avanti di una refutazione.
-            Data una logica $L$ ed una formula $A$, se si costruisce una derivazione di $A$ nel calcolo per $L$, allora la formula $A$ non è valida nella logica $L$.
-            Dalla derivazione è possibile ottenere un \textit{contro-modello} per $A$, ossia un modello nella logica $L$ in cui $A$ è falsificata.
         \end{block}
+        \begin{itemize}
+            \item Data una logica $L$ ed una formula $A$, se si costruisce una derivazione di $A$ nel calcolo per $L$, allora la formula $A$ non è valida nella logica $L$.
+            \item Dalla derivazione è possibile ottenere un \textit{contro-modello} per $A$, ossia un modello nella logica $L$ in cui $A$ è falsificata.
+        \end{itemize}
     \end{frame}
 
     \begin{frame}{Definizioni}
@@ -79,45 +81,43 @@
         \end{block}
     \end{frame}
 
-    \subsection{Requisiti Funzionali}
-    \begin{frame}{Requisiti Funzionali}
+    \subsection{Requisiti}
+    \begin{frame}{Requisiti}
 
         \textbf{Requisiti di base}
         \begin{itemize}
-            \item Lettura della formula da standard input o file di testo
-            \item Interpretazione della formula e costruzione della rappresentazione interna
-            \item Applicazione del calcolo di refutazione e costruzione del contro-modello
-            \item Stampa dei risultati sotto forma di applicazione di regole
+            \item Lettura della formula da standard input o file di testo.
+            \item Costruzione dell'albero di sintassi (rappresentazione interna).
+            \item Applicazione del calcolo di refutazione e costruzione della derivazione, se possibile.
+            \item Stampa a video dei passaggi fondamentali della derivazione.
         \end{itemize}
 
         \textbf{Requisiti sui tipi}
         \begin{itemize}
-            \item Supporto degli operatori logici $\land$, $\lor$, $\supset$, $\not$
-            \item Supporto di proposizioni atomiche e di costanti come $\bot$
-            \item Supporto di formule innestate
-            \item Supporto della lettura della formula sia sotto forma di stringa che di rappresentazione interna
+            \item Supporto degli operatori logici $\land$, $\lor$, $\supset$, $\neg$.
+            \item Supporto di proposizioni atomiche e di costanti come $\bot$.
+            \item Supporto di formule innestate.
         \end{itemize}
 
     \end{frame}
 
-    \subsection{Requisiti di Integrazione}
-    \begin{frame}{Requisiti di Integrazione}
+    \subsection{Requisiti}
+    \begin{frame}{Requisiti}
         Le caratteristiche dei moduli e dell'algoritmo:
         \begin{itemize}
-            \item Implementato in F\# compatibile con .NET 7.0
-            \item Modularità: possibilità di riutilizzare il codice
-            \item Controllo errori: in caso di errore, restituizione di errore con informazioni di traccia
-            \item Tracciamento: le funzioni principali stampano messaggi sulle operazioni che stanno eseguendo
+            \item Implementato in F\# compatibile con .NET 7.0.
+            \item Modularità: possibilità di riutilizzare il codice.
+            \item Tracciamento: in caso di errore, restituizione di errore con informazioni di traccia.
         \end{itemize}
     \end{frame}
 
     \subsection{Struttura del progetto}
     \begin{frame}{Struttura del progetto}
         \begin{itemize}
-            \item Modulo \textit{Lexer} che trasforma una formula sotto forma di stringa in un insieme di \textit{Token}
-            \item Modulo \textit{Parser} che trasforma l'insieme di \textit{Token} nella rappresentazione interna della formula
-            \item Modulo \textit{Expression} che racchiude le funzioni per la manipolazione, trasformazione o estrazione di dati da una data formula
-            \item Modulo \textit{Calculus} che racchiude le funzioni che rappresentano l'algoritmo stesso
+            \item Modulo \textit{Lexer} che mediante una grammatica spezza la formula nelle sue singole componenti.
+            \item Modulo \textit{Parser} che genera l'albero di sintassi della rappresentazione interna.
+            \item Modulo \textit{Expression} per manipolare, trasformare o estrarre dati da una data formula.
+            \item Modulo \textit{Calculus} che racchiude le funzioni che rappresentano il calcolo di refutazione.
         \end{itemize}
     \end{frame}
 
