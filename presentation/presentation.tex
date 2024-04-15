@@ -86,7 +86,7 @@
 
         \textbf{Requisiti di base}
         \begin{itemize}
-            \item Lettura della formula da standard input o file di testo.
+            \item Lettura della formula sotto forma di stringa.
             \item Costruzione dell'albero di sintassi (rappresentazione interna).
             \item Applicazione del calcolo di refutazione e costruzione della derivazione, se possibile.
             \item Stampa a video dei passaggi fondamentali della derivazione.
@@ -114,11 +114,17 @@
     \subsection{Struttura del progetto}
     \begin{frame}{Struttura del progetto}
         \begin{itemize}
-            \item Modulo \textit{Lexer} che mediante una grammatica spezza la formula nelle sue singole componenti.
+            \item Modulo \textit{Lexer} che mediante una grammatica restituisce una lista di \textit{Token} partendo dalla formula.
             \item Modulo \textit{Parser} che genera l'albero di sintassi della rappresentazione interna.
             \item Modulo \textit{Expression} per manipolare, trasformare o estrarre dati da una data formula.
             \item Modulo \textit{Calculus} che racchiude le funzioni che rappresentano il calcolo di refutazione.
         \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Struttura del progetto}
+        \begin{figure}[h]
+            \includegraphics[scale=0.4]{../images/composizione.drawio.png}
+        \end{figure}
     \end{frame}
 
     \subsection{Strumenti}
