@@ -45,9 +45,21 @@
     \subsection{Introduzione}
     \begin{frame}{Introduzione}
 
+        \begin{block}{Le logiche $GD_k$ e $GD$}
+            $GD_k$ è l'insieme di formule valide nei modelli lineari $K$, tali che $h(K) \leq k$, quindi $GD = \bigcap_{k \geq 0}GD_k$.
+
+            $IPL \subset GD \subset \dots \subset GD_2 \subset GD_1 \subset GD_0 = CPL$, dove:
+            \begin{itemize}
+                \item $CPL$ è l'insieme delle formule valide nella logica classica
+                \item $IPL$ è la logica intuizionista proposizionale
+            \end{itemize}
+
+
+        \end{block}
+
         Il punto di interesse principale del progetto sono le logiche di G\"odel-Dummett. \\
         Si tratta di una famiglia infinita di logiche dette \textit{intermedie}, caratterizzate da modelli lineari (di qualunque profondità). \\
-        Per tali logiche sono noti vari calcoli e strategie di prove.
+        Per tali logiche sono noti vari calcoli e strategie di derivazione.
 
     \end{frame}
 
@@ -62,7 +74,7 @@
 
     \begin{frame}{Definizioni}
         \begin{block}{Calcolo di refutazione}
-            Il calcolo $RGD(G)$ è un procedimento per inferire la non-provabilità di $G$ in $GD_k$, pensato per supportare una ricerca in avanti di una refutazione.
+            Il calcolo $RGD_k(G)$ è un procedimento per inferire la non-provabilità di $G$ in $GD_k$, pensato per supportare una \textit{forward proof search}.
         \end{block}
         \begin{itemize}
             \item Data una logica $L$ ed una formula $A$, se si costruisce una derivazione di $A$ nel calcolo per $L$, allora la formula $A$ non è valida nella logica $L$.
