@@ -77,6 +77,8 @@ In questo caso:
 Gli operatori logici devono essere supportati nelle loro diverse forme di rappresentazione ($\land$, and, ||, |, or, $\lor$, ecc).
 Ogni formula correttamente interpretata deve essere trasformata nella sua rappresentazione interna, ossia un grafo che viene rappresentato tramite un \textit{type}. \\
 
+\newpage
+
 \section{Lettura}
 La definizione della formula di partenza da dare in input all'algoritmo, ossia l'obiettivo (goal), è stato scelto di inserirla in un file di testo (.txt). \\
 Questa decisione è stata presa per principalmente 2 motivi:
@@ -97,6 +99,8 @@ Le due componente dell' interprete sono:
 \end{itemize}
 Questo passaggio è reso obbligatorio dalla scelta di utilizzare i file di testo (ed in generale, le stringhe) per definire le formule.
 Essendo il processo di interpretazione complesso e con possibilità di errori, è stato presdisposto un sistema di \textit{Logging} per fornire le informazioni, in caso di errore, del tipo di errore e del perchè si è verificato. \\
+
+\newpage
 
 \section{Calcolo}
 Dopo aver ottenuto la rappresentazione interna della formula \textit{obiettivo}, è possibile eseguire l'algoritmo per il calcolo di refutazione. \\
